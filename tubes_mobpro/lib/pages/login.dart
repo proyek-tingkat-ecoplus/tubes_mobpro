@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tubes_webpro/pages/Home.dart';
+import 'package:tubes_webpro/pages/register.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key, }) : super(key: key);
@@ -212,7 +213,7 @@ class _LoginState extends State<Login> {
                             Text("Belum punya akun?", style: TextStyle(color: Color.fromRGBO(38, 66, 22, 10), fontSize: 15),),
                             TextButton(
                               onPressed: () {
-                                //Navigator.pushNamed(context, Register.routeName);
+                                Navigator.pushNamed(context, Register.routeName);
                               },
                               child: Text("Buat Akun", style: TextStyle(color: Color.fromRGBO(38, 66, 22, 10), fontSize: 15, fontWeight: FontWeight.bold),),
                             ),
