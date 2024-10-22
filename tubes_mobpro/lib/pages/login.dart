@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tubes_webpro/pages/Home.dart';
 import 'package:tubes_webpro/pages/register.dart';
+import 'package:tubes_webpro/compoennt/CostomTextButton.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key, }) : super(key: key);
@@ -154,30 +155,28 @@ class _LoginState extends State<Login> {
                             ],
                           ),
                         ),
-                        TextButton(
-                          style: TextButton.styleFrom(
+                        CustomTextButton(
+                          // Named argument
+                            onPressed: () {
+                              print("Button Pressed");
+                            }, 
+                            style: TextButton.styleFrom(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.all(Radius.circular(10)),
                             ),
                             // side: BorderSide(color: Colors.white),
-                            minimumSize: Size(1000, 40),
-                            foregroundColor: Color(Colors.white.value) ,
-                            backgroundColor: Color.fromRGBO(24, 119, 242, 10),
-                          ),
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) { //  buat validasi form
-                              //Navigator.pushNamed(context, Home.routeName);
-                              
-                            }
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.facebook),
-                              SizedBox(width: 10,),
-                              Text('Masuk dengan facebook', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
-                            ],
-                          ),
+                              minimumSize: Size(1000, 40),
+                              foregroundColor: Color(Colors.white.value) ,
+                              backgroundColor: Color.fromRGBO(24, 119, 242, 10),
+                            ), // Named argument
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.facebook),
+                                SizedBox(width: 10,),
+                                Text('Masuk dengan facebook', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
+                              ],
+                            ), 
                         ),
                         SizedBox(height: 12,),
                             // divider ---or----

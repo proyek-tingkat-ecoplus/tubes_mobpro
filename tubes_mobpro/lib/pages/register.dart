@@ -21,6 +21,7 @@ class _RegisterState extends State<Register> {
           padding: const EdgeInsets.only(top: 40, left: 40, right: 40),
           child: Column( mainAxisAlignment: MainAxisAlignment.start, 
             children: [
+                  SizedBox(height: 80,),
               Text("Selamat Datang", style: TextStyle(color: Color.fromRGBO(38, 66, 22, 10), fontWeight: FontWeight.bold, fontSize: 30),),
               SizedBox(height: 20,),
               TextFormField(
@@ -93,7 +94,7 @@ class _RegisterState extends State<Register> {
               },
             ),
             SizedBox(height: 20,),
-             TextButton(
+              TextButton(
               child: Text(
                 "Sign Up",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -179,7 +180,7 @@ class _RegisterState extends State<Register> {
                     style: TextStyle(color: Color.fromRGBO(38, 66, 22, 10)),
                   ),
                   TextButton(onPressed: (){
-
+                    Navigator.pushNamed(context, '/login');
                   }, child: Text("Masuk di sini", style: TextStyle(decoration: TextDecoration.underline, color: Color.fromRGBO(38, 66, 22, 10), fontWeight: FontWeight.bold),)),
                 ],
               )
