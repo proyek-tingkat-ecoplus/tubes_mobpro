@@ -71,11 +71,100 @@ class Home extends StatelessWidget {
           SizedBox(width: 16),
         ],
       ),
-      body: SafeArea(
-        child: Center(
-         
+        body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Search bar
+              TextField(
+                decoration: InputDecoration(
+                  hintText: 'Pencarian',
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide.none,
+                  ),
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                ),
+              ),
+              SizedBox(height: 16),
+
+              // Image banner (example)
+              Container(
+                height: 150,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Center(
+                  child: Text(
+                    'Banner Image',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16),
+
+              // Menu grid
+              Text(
+                'Menu',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 8),
+              GridView.count(
+                crossAxisCount: 4,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+              ),
+              SizedBox(height: 16),
+
+              // Pending Proposal
+              Text(
+                'Pending Proposal',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 8),
+              Container(
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.green[50],
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.green),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Pending Proposal',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                    Text(
+                      '20',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 16),
+
+              // Calendar
+              Text(
+                'Kalender',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ],
           ),
         ),
-      );
+      ),
+    );
   }
 }
