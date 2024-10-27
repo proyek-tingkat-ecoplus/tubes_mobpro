@@ -3,6 +3,7 @@ import 'package:tubes_webpro/compoennt/SplashScreen.dart';
 import 'package:tubes_webpro/pages/Home.dart';
 import 'package:tubes_webpro/pages/login.dart';
 import 'package:tubes_webpro/pages/page_1.dart';
+import 'package:tubes_webpro/pages/portfile.dart';
 import 'package:tubes_webpro/pages/register.dart';
 import 'package:tubes_webpro/pages/dashboard.dart';
 
@@ -19,7 +20,8 @@ class Routes extends StatelessWidget {
         Page_1.routeName: (context) => const Page_1(),
         Login.routeName: (context) => const Login(),
         Register.routeName: (context) => const Register(),
-        dashboard.routeName: (context) => const dashboard(),
+        Dashboard.routeName: (context) => const Dashboard(),
+        ProfilePage.routeName: (context) => const ProfilePage(),
       },
     );
   }

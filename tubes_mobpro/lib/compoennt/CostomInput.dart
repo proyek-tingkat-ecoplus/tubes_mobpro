@@ -10,7 +10,7 @@ class CustomInput extends StatelessWidget {
   const CustomInput({
     Key? key,
     required this.hintText,
-    required this.controller,,
+    required this.controller,
     this.isPassword = false,
     this.inputType = TextInputType.text,
     required this.icon,
