@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:tubes_webpro/pages/Home.dart';
+import 'package:tubes_webpro/pages/portfile.dart';
 
-class dashboard extends StatefulWidget {
-  const dashboard({super.key});
-
+class Dashboard extends StatefulWidget {
+  const Dashboard({super.key});
   static const routeName = '/dashboard';
+
   @override
-  State<dashboard> createState() => _dashboardState();
+  State<Dashboard> createState() => _DashboardState();
 }
 
-
-class _dashboardState extends State<dashboard> {
+class _DashboardState extends State<Dashboard> {
   int _selectedIndex = 0;
   PageController _pageController = PageController();
 
+  final List<Color> _backgroundColors = [
+    Colors.white, // Home color
+    Colors.lightBlueAccent, // File color
+    Colors.lightGreenAccent, // Forum color
+    Color.fromRGBO(38, 66, 22, 10),  // ProfilePage color
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -22,89 +28,109 @@ class _dashboardState extends State<dashboard> {
     _pageController.jumpToPage(index);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        backgroundColor: _backgroundColors[_selectedIndex], // Dynamic background color
         body: SafeArea(
-          child: PageView(
+          child: NoSwipePageView( // Use NoSwipePageView
             controller: _pageController,
-            onPageChanged: (index) {
-              setState(() {
-                _selectedIndex = index;
-              });
-            },
             children: [
-             Home(
-              
-             ),
-              // Halaman Email
+              Home(),
               Center(
                 child: Text(
                   'File',
                   style: TextStyle(fontSize: 30),
                 ),
               ),
-              // Halaman Profile
               Center(
                 child: Text(
                   'Forum',
                   style: TextStyle(fontSize: 30),
                 ),
               ),
-              Center(
-                child: Text(
-                  'Setelan',
-                  style: TextStyle(fontSize: 30),
-                ),
-              ),
+              ProfilePage(),
             ],
           ),
         ),
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.all(20.0),
-           child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Color.fromRGBO(38, 66, 22, 10), style: BorderStyle.solid, width: 2),
-                borderRadius: BorderRadius.circular(100)
+        bottomNavigationBar: Container(
+          margin: EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 10,
+                spreadRadius: 1,
+                offset: Offset(0, 5),
               ),
-                child: ClipRRect(
-                 borderRadius: BorderRadius.circular(100),
-                  child: BottomNavigationBar(
-                    unselectedIconTheme: IconThemeData(
-                      color: Colors.green,
-                    ),
-                  items: const <BottomNavigationBarItem>[
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.home, size: 30),
-                    label: '',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.folder),
-                    label: ''
-                  ),
-                   BottomNavigationBarItem(
-                    icon: Icon(Icons.forum),
-                    label: ''
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.settings),
-                    label: ''
-                  ),
-                  
-                ],
-                backgroundColor: Colors.transparent,
-                currentIndex: _selectedIndex,
-                selectedItemColor: Color.fromRGBO(38, 66, 22, 10),
-                onTap: _onItemTapped,
-                showSelectedLabels: false,
-                showUnselectedLabels: false,
-              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(30),
+            child: BottomNavigationBar(
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home, size: 30),
+                  label: '',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.folder, size: 30),
+                  label: '',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.forum, size: 30),
+                  label: '',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.settings, size: 30),
+                  label: '',
+                ),
+              ],
+              backgroundColor: Colors.white,
+              currentIndex: _selectedIndex,
+              selectedItemColor: Color.fromRGBO(38, 66, 22, 10),
+              unselectedItemColor: Colors.black,
+              onTap: _onItemTapped,
+              showSelectedLabels: false,
+              showUnselectedLabels: false,
+              type: BottomNavigationBarType.fixed,
             ),
           ),
         ),
+        // Uncomment if needed
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () {},
+        //   child: Icon(Icons.add),
+        //   backgroundColor: Color.fromRGBO(38, 66, 22, 10),
+        // ),
+        // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
+    );
+  }
+}
+
+class NoSwipePageView extends StatelessWidget {
+  final PageController controller;
+  final List<Widget> children;
+
+  const NoSwipePageView({
+    Key? key,
+    required this.controller,
+    required this.children,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return PageView.builder(
+      controller: controller,
+      physics: NeverScrollableScrollPhysics(), // Disables swiping
+      itemBuilder: (context, index) {
+        return children[index];
+      },
+      itemCount: children.length,
     );
   }
 }
