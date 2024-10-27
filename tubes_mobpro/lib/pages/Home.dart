@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:table_calendar/table_calendar.dart';
 import 'package:tubes_webpro/pages/login.dart';
 
 class Home extends StatelessWidget {
@@ -41,30 +42,18 @@ class Home extends StatelessWidget {
                 ),
               ],
             ),
-            IconButton(
-            icon: const Icon(Icons.notifications_active_sharp, color: Color.fromRGBO(0, 48, 48, 10),),
-            tooltip: 'Notifikasi',
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute<void>(
-                builder: (BuildContext context) {
-                  return Scaffold(
-                    appBar: AppBar(
-                      title: const Text('Next page'),
-                    ),
-                    body: const Center(
-                      child: Text(
-                        'This is the next page',
-                        style: TextStyle(fontSize: 24),
-                      ),
-                    ),
-                  );
-                },
-              ));
-            },
-            ),
-          ],
+         
+          ],  
         ),
         actions: [
+          IconButton(
+            icon: Icon(Icons.notifications_active_rounded),
+            tooltip: 'Notifikasi',
+            onPressed: () {
+              
+            }, 
+          ),
+          SizedBox(width: 16),
           CircleAvatar(
             backgroundImage: NetworkImage('https://example.com/profile.jpg'), // URL gambar profil
           ),
@@ -119,6 +108,12 @@ class Home extends StatelessWidget {
                 crossAxisCount: 4,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
+                children: [
+                  _buildMenuItem(Icons.people, 'Role\nManagement'),
+                  _buildMenuItem(Icons.forum, 'Forum\nManagement'),
+                  _buildMenuItem(Icons.file_present, 'Pengajuan\nProposal'),
+                  _buildMenuItem(Icons.book, 'Pemantauan\nInformasi'),
+                ],
               ),
               SizedBox(height: 16),
 
@@ -161,6 +156,26 @@ class Home extends StatelessWidget {
                 'Kalender',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
+              SizedBox(height: 8),
+              TableCalendar(
+                firstDay: DateTime.utc(2020, 10, 16),
+                lastDay: DateTime.utc(2030, 3, 14),
+                focusedDay: DateTime.now(),
+                headerStyle: HeaderStyle(
+                  formatButtonVisible: false,
+                  titleCentered: true,
+                ),
+                calendarStyle: CalendarStyle(
+                  todayDecoration: BoxDecoration(
+                    color: Color.fromRGBO(38, 66, 22, 10),
+                    shape: BoxShape.circle,
+                  ),
+                  selectedDecoration: BoxDecoration(
+                    color: Colors.greenAccent,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              )
             ],
           ),
         ),
@@ -168,3 +183,29 @@ class Home extends StatelessWidget {
     );
   }
 }
+
+// Function to build menu item
+  Widget _buildMenuItem(IconData icon, String label) {
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.green[50],
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            icon,
+            color: Color.fromRGBO(38, 66, 22, 10),
+            size: 32,
+          ),
+        ),
+        SizedBox(height: 8),
+        Text(
+          label,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 12),
+        ),
+      ],
+    );
+  }

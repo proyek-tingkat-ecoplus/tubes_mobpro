@@ -66,7 +66,7 @@ class _dashboardState extends State<dashboard> {
           padding: const EdgeInsets.all(20.0),
            child: Container(
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.green, style: BorderStyle.solid, width: 5),
+                border: Border.all(color: Color.fromRGBO(38, 66, 22, 10), style: BorderStyle.solid, width: 2),
                 borderRadius: BorderRadius.circular(100)
               ),
                 child: ClipRRect(
