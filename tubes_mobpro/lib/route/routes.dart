@@ -8,14 +8,14 @@ import 'package:tubes_webpro/pages/register.dart';
 import 'package:tubes_webpro/pages/dashboard.dart';
 
 class Routes extends StatelessWidget {
-  const Routes({Key? key}) : super(key: key);
+  const Routes({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       initialRoute: '/',
       routes: {
-        '/':(context) => const Splashscreen(),
+        '/': (context) => const Splashscreen(),
         Home.routeName: (context) => const Home(),
         Page_1.routeName: (context) => const Page_1(),
         Login.routeName: (context) => const Login(),

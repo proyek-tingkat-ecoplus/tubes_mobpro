@@ -8,13 +8,13 @@ class CustomInput extends StatelessWidget {
   final IconData icon;
 
   const CustomInput({
-    Key? key,
+    super.key,
     required this.hintText,
     required this.controller,
     this.isPassword = false,
     this.inputType = TextInputType.text,
     required this.icon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

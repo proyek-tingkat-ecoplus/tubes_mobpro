@@ -27,15 +27,15 @@ class _PersistentButtonNavState extends State<PersistentButtonNav> {
   List<Widget> _buildScreens() {
     // Menyediakan dua layar, sesuai dengan dua item di nav bar
     return [
-      Dashboard(),           // Layar pertama
-      Container(),            // Layar kedua (dummy atau halaman settings)
+      const Dashboard(), // Layar pertama
+      Container(), // Layar kedua (dummy atau halaman settings)
     ];
   }
 
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
-        icon: Icon(CupertinoIcons.home),
+        icon: const Icon(CupertinoIcons.home),
         title: ("Home"),
         activeColorPrimary: CupertinoColors.activeBlue,
         inactiveColorPrimary: CupertinoColors.systemGrey,
@@ -49,7 +49,7 @@ class _PersistentButtonNavState extends State<PersistentButtonNav> {
         ),
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(CupertinoIcons.settings),
+        icon: const Icon(CupertinoIcons.settings),
         title: ("Settings"),
         activeColorPrimary: CupertinoColors.activeBlue,
         inactiveColorPrimary: CupertinoColors.systemGrey,

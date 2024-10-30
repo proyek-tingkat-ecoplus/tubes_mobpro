@@ -12,13 +12,13 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   int _selectedIndex = 0;
-  PageController _pageController = PageController();
+  final PageController _pageController = PageController();
 
   final List<Color> _backgroundColors = [
     Colors.white, // Home color
     Colors.lightBlueAccent, // File color
     Colors.lightGreenAccent, // Forum color
-    Color.fromRGBO(38, 66, 22, 10),  // ProfilePage color
+    const Color.fromRGBO(38, 66, 22, 10), // ProfilePage color
   ];
 
   void _onItemTapped(int index) {
@@ -32,11 +32,13 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: _backgroundColors[_selectedIndex], // Dynamic background color
+        backgroundColor:
+            _backgroundColors[_selectedIndex], // Dynamic background color
         body: SafeArea(
-          child: NoSwipePageView( // Use NoSwipePageView
+          child: NoSwipePageView(
+            // Use NoSwipePageView
             controller: _pageController,
-            children: [
+            children: const [
               Home(),
               Center(
                 child: Text(
@@ -55,11 +57,11 @@ class _DashboardState extends State<Dashboard> {
           ),
         ),
         bottomNavigationBar: Container(
-          margin: EdgeInsets.all(12),
+          margin: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: Colors.transparent,
             borderRadius: BorderRadius.circular(30),
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                 color: Colors.black26,
                 blurRadius: 10,
@@ -91,7 +93,7 @@ class _DashboardState extends State<Dashboard> {
               ],
               backgroundColor: Colors.white,
               currentIndex: _selectedIndex,
-              selectedItemColor: Color.fromRGBO(38, 66, 22, 10),
+              selectedItemColor: const Color.fromRGBO(38, 66, 22, 10),
               unselectedItemColor: Colors.black,
               onTap: _onItemTapped,
               showSelectedLabels: false,
@@ -117,16 +119,16 @@ class NoSwipePageView extends StatelessWidget {
   final List<Widget> children;
 
   const NoSwipePageView({
-    Key? key,
+    super.key,
     required this.controller,
     required this.children,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return PageView.builder(
       controller: controller,
-      physics: NeverScrollableScrollPhysics(), // Disables swiping
+      physics: const NeverScrollableScrollPhysics(), // Disables swiping
       itemBuilder: (context, index) {
         return children[index];
       },

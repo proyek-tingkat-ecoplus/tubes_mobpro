@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tubes_webpro/pages/Home.dart';  
+import 'package:tubes_webpro/pages/Home.dart';
 
 class Page_1 extends StatelessWidget {
-  const Page_1({Key? key}) : super(key: key);
+  const Page_1({super.key});
 
   static const routeName = '/page_1';
 
