@@ -46,6 +46,7 @@ class _LoginState extends State<Login> {
                               labelText: 'Username',
                               prefixIcon: Icon(Icons.person),
                             ),
+                            controller: TextEditingController(),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter your username';
