@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tubes_webpro/pages/PersetujuanPages.dart';
 import 'package:tubes_webpro/pages/PersonalDetailPages.dart';
 import 'package:tubes_webpro/pages/dashboard.dart';
+import 'package:tubes_webpro/pages/help.dart';
 import 'package:tubes_webpro/pages/page_1.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -110,7 +111,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 icon: Icons.help_outline,
                 title: 'Bantuan',
                 onPressed: () {
-                  // Add your onPressed code here
+                 Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HelpPage()),
+                  );
                 },
               ),
               _buildOptionButton(
