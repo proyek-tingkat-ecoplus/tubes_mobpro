@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tubes_webpro/pages/Home.dart';
+import 'package:tubes_webpro/pages/PemetaaanMap.dart';
 import 'package:tubes_webpro/pages/portfile.dart';
 
 class Dashboard extends StatefulWidget {
-  Dashboard({super.key, this.selectedIndex = 0});
+  const Dashboard({super.key, this.selectedIndex = 0});
   final int selectedIndex; // Change to final
   static const routeName = '/dashboard';
 
@@ -17,9 +18,9 @@ class _DashboardState extends State<Dashboard> {
 
   final List<Color> _backgroundColors = [
     Colors.white, // Home color
-    Colors.lightBlueAccent, // File color
+    Colors.white, // File color
     Colors.lightGreenAccent, // Forum color
-    Color.fromRGBO(38, 66, 22, 10), // ProfilePage color
+    const Color.fromRGBO(38, 66, 22, 10), // ProfilePage color
   ];
 
   @override
@@ -51,9 +52,9 @@ class _DashboardState extends State<Dashboard> {
           child: PageView(
             controller: _pageController,
             physics: const NeverScrollableScrollPhysics(),
-            children: [
+            children: const [
               Home(),
-              Center(child: Text('File')),
+              PemetaaanMap(),
               Center(child: Text('Forum')),
               ProfilePage(),
             ],
@@ -64,12 +65,12 @@ class _DashboardState extends State<Dashboard> {
           decoration: BoxDecoration(
             color: Colors.transparent,
             borderRadius: BorderRadius.circular(30),
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                 color: Colors.black26,
                 blurRadius: 10,
                 spreadRadius: 1,
-                offset: const Offset(0, 5),
+                offset: Offset(0, 5),
               ),
             ],
           ),
@@ -96,7 +97,7 @@ class _DashboardState extends State<Dashboard> {
               ],
               backgroundColor: Colors.white,
               currentIndex: _selectedIndex,
-              selectedItemColor: Color.fromRGBO(38, 66, 22, 10),
+              selectedItemColor: const Color.fromRGBO(38, 66, 22, 10),
               unselectedItemColor: Colors.black,
               onTap: _onItemTapped,
               showSelectedLabels: false,

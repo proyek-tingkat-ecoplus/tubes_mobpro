@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:tubes_webpro/pages/Home.dart';
 import 'package:tubes_webpro/pages/dashboard.dart';
 import 'package:tubes_webpro/pages/register.dart';
 import 'package:tubes_webpro/compoennt/CostomTextButton.dart';
 
 class Login extends StatefulWidget {
-  const Login({Key? key, }) : super(key: key);
+  const Login({super.key, });
 
   static const routeName = '/login';
 
@@ -24,17 +23,17 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Scaffold(
-        backgroundColor: Color.fromRGBO(38, 66, 22, 10),
+        backgroundColor: const Color.fromRGBO(38, 66, 22, 10),
         body: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Selamat Datang", style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),),
+              const Text("Selamat Datang", style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),),
               Center(
                 child: Card(
-                  margin: EdgeInsets.all(20),
+                  margin: const EdgeInsets.all(20),
                   child: Padding(
-                    padding: EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(16),
                     child: Form(
                       key: _formKey,
                       child: Column(
@@ -57,7 +56,7 @@ class _LoginState extends State<Login> {
                           TextFormField(
                             decoration:  InputDecoration(
                               labelText: 'Kata Sandi',
-                              prefixIcon: Icon(Icons.lock),
+                              prefixIcon: const Icon(Icons.lock),
                               suffixIcon: IconButton(
                                 onPressed: () {
                                   setState(() {
@@ -75,7 +74,7 @@ class _LoginState extends State<Login> {
                             },
                           ),
               
-                          SizedBox(height: 12),
+                          const SizedBox(height: 12),
                           
                           Row(
                             children: [
@@ -86,29 +85,29 @@ class _LoginState extends State<Login> {
                                     isChecked = value!;
                                   });
                                 },
-                                fillColor: MaterialStateProperty.all<Color>(Color.fromRGBO(38, 66, 22, 10)),
+                                fillColor: WidgetStateProperty.all<Color>(const Color.fromRGBO(38, 66, 22, 10)),
                               ),
-                              Text('Ingat saya', style: TextStyle(fontSize: 16),),
+                              const Text('Ingat saya', style: TextStyle(fontSize: 16),),
                             ],
                           ),
                           TextButton(
                             style: TextButton.styleFrom(
-                              shape: RoundedRectangleBorder(
+                              shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.all(Radius.circular(10)),
                               ),
                               // side: BorderSide(color: Colors.white),
-                              minimumSize: Size(1000, 40),
+                              minimumSize: const Size(1000, 40),
                               foregroundColor: Color(Colors.white.value) ,
-                              backgroundColor: Color.fromRGBO(38, 66, 22, 10),
+                              backgroundColor: const Color.fromRGBO(38, 66, 22, 10),
                             ),
                             onPressed: () {
                               if (_formKey.currentState!.validate()) { //  buat validasi form
                                 Navigator.pushNamed(context, Dashboard.routeName);
                               }
                             },
-                            child: Text('Masuk', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                            child: const Text('Masuk', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
                           ),
-                          SizedBox(height: 12,),
+                          const SizedBox(height: 12,),
                           // divider ---or----
                           const Row(
                             children:  <Widget>[
@@ -119,7 +118,7 @@ class _LoginState extends State<Login> {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                padding: EdgeInsets.symmetric(horizontal: 8.0),
                                 child: Text(
                                   "OR",
                                   style: TextStyle(color: Colors.grey),
@@ -133,15 +132,15 @@ class _LoginState extends State<Login> {
                               ),
                             ],
                           ),
-                          SizedBox(height: 12,),
+                          const SizedBox(height: 12,),
                           TextButton(
                             style: TextButton.styleFrom(
-                              shape: RoundedRectangleBorder(
+                              shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.all(Radius.circular(10)),
                               ),
-                              side: BorderSide(color: Color.fromRGBO(24, 119, 242, 10)),
-                              minimumSize: Size(1000, 40),
-                              foregroundColor: Color.fromRGBO(24, 119, 242, 10) ,
+                              side: const BorderSide(color: Color.fromRGBO(24, 119, 242, 10)),
+                              minimumSize: const Size(1000, 40),
+                              foregroundColor: const Color.fromRGBO(24, 119, 242, 10) ,
                               backgroundColor: Color(Colors.white.value),
                             ),
                             onPressed: () {
@@ -150,7 +149,7 @@ class _LoginState extends State<Login> {
                                 
                               }
                             },
-                            child: Row(
+                            child: const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(Icons.g_mobiledata_outlined),
@@ -164,15 +163,15 @@ class _LoginState extends State<Login> {
                                 print("Button Pressed");
                               }, 
                               style: TextButton.styleFrom(
-                              shape: RoundedRectangleBorder(
+                              shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.all(Radius.circular(10)),
                               ),
                               // side: BorderSide(color: Colors.white),
-                                minimumSize: Size(1000, 40),
+                                minimumSize: const Size(1000, 40),
                                 foregroundColor: Color(Colors.white.value) ,
-                                backgroundColor: Color.fromRGBO(24, 119, 242, 10),
+                                backgroundColor: const Color.fromRGBO(24, 119, 242, 10),
                               ), // Named argument
-                              child: Row(
+                              child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Icon(Icons.facebook),
@@ -181,7 +180,7 @@ class _LoginState extends State<Login> {
                                 ],
                               ), 
                           ),
-                          SizedBox(height: 12,),
+                          const SizedBox(height: 12,),
                               // divider ---or----
                             const Row(
                             children:  <Widget>[
@@ -192,7 +191,7 @@ class _LoginState extends State<Login> {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                padding: EdgeInsets.symmetric(horizontal: 8.0),
                                 child: Text(
                                   "OR",
                                   style: TextStyle(color: Colors.grey),
@@ -207,17 +206,17 @@ class _LoginState extends State<Login> {
                               //bottom 
                             ],
                           ),
-                          SizedBox(height: 12,),
-                          Text("Lupa password?", style: TextStyle(color: Color.fromRGBO(38, 66, 22, 10), fontSize: 15, fontWeight: FontWeight.bold),),
+                          const SizedBox(height: 12,),
+                          const Text("Lupa password?", style: TextStyle(color: Color.fromRGBO(38, 66, 22, 10), fontSize: 15, fontWeight: FontWeight.bold),),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text("Belum punya akun?", style: TextStyle(color: Color.fromRGBO(38, 66, 22, 10), fontSize: 15),),
+                              const Text("Belum punya akun?", style: TextStyle(color: Color.fromRGBO(38, 66, 22, 10), fontSize: 15),),
                               TextButton(
                                 onPressed: () {
                                   Navigator.pushNamed(context, Register.routeName);
                                 },
-                                child: Text("Buat Akun", style: TextStyle(color: Color.fromRGBO(38, 66, 22, 10), fontSize: 15, fontWeight: FontWeight.bold),),
+                                child: const Text("Buat Akun", style: TextStyle(color: Color.fromRGBO(38, 66, 22, 10), fontSize: 15, fontWeight: FontWeight.bold),),
                               ),
                             ],
                           ),

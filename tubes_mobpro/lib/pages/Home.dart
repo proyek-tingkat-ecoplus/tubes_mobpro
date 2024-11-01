@@ -3,7 +3,7 @@ import 'package:table_calendar/table_calendar.dart';
 // import 'package:tubes_webpro/pages/login.dart';
 
 class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   static const routeName = '/home';
 
@@ -14,7 +14,7 @@ class Home extends StatelessWidget {
         backgroundColor: Colors.white, // Latar belakang putih
         elevation: 0, // Menghilangkan bayangan AppBar
         automaticallyImplyLeading: false, // Menghilangkan tombol kembali
-        title: Row(
+        title: const Row(
           children: [
             Icon(
               Icons.eco, // Ikon pohon (atau Anda bisa mengganti dengan custom icon)
@@ -46,17 +46,17 @@ class Home extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.notifications_active_rounded),
+            icon: const Icon(Icons.notifications_active_rounded),
             tooltip: 'Notifikasi',
             onPressed: () {
               
             }, 
           ),
-          SizedBox(width: 16),
-          CircleAvatar(
+          const SizedBox(width: 16),
+          const CircleAvatar(
             backgroundImage: NetworkImage('https://example.com/profile.jpg'), // URL gambar profil
           ),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
         ],
       ),
         body: Padding(
@@ -69,7 +69,7 @@ class Home extends StatelessWidget {
               TextField(
                 decoration: InputDecoration(
                   hintText: 'Pencarian',
-                  prefixIcon: Icon(Icons.search),
+                  prefixIcon: const Icon(Icons.search),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30),
                     borderSide: BorderSide.none,
@@ -78,7 +78,7 @@ class Home extends StatelessWidget {
                   fillColor: Colors.grey[200],
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               // Image banner (example)
               Container(
@@ -88,25 +88,25 @@ class Home extends StatelessWidget {
                   color: Colors.grey,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Center(
+                child: const Center(
                   child: Text(
                     'Banner Image',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               // Menu grid
-              Text(
+              const Text(
                 'Menu',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               GridView.count(
                 crossAxisCount: 4,
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 children: [
                   _buildMenuItem(Icons.people, 'Role\nManagement'),
                   _buildMenuItem(Icons.forum, 'Forum\nManagement'),
@@ -114,22 +114,22 @@ class Home extends StatelessWidget {
                   _buildMenuItem(Icons.book, 'Pemantauan\nInformasi'),
                 ],
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               // Pending Proposal
-              Text(
+              const Text(
                 'Pending Proposal',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Container(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.green[50],
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(color: Colors.green),
                 ),
-                child: Row(
+                child: const Row(
                   children: [
                     Expanded(
                       child: Text(
@@ -148,23 +148,23 @@ class Home extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               // Calendar
-              Text(
+              const Text(
                 'Kalender',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               TableCalendar(
                 firstDay: DateTime.utc(2020, 10, 16),
                 lastDay: DateTime.utc(2030, 3, 14),
                 focusedDay: DateTime.now(),
-                headerStyle: HeaderStyle(
+                headerStyle: const HeaderStyle(
                   formatButtonVisible: false,
                   titleCentered: true,
                 ),
-                calendarStyle: CalendarStyle(
+                calendarStyle: const CalendarStyle(
                   todayDecoration: BoxDecoration(
                     color: Color.fromRGBO(38, 66, 22, 10),
                     shape: BoxShape.circle,
@@ -188,22 +188,22 @@ class Home extends StatelessWidget {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: Colors.green[50],
             shape: BoxShape.circle,
           ),
           child: Icon(
             icon,
-            color: Color.fromRGBO(38, 66, 22, 10),
+            color: const Color.fromRGBO(38, 66, 22, 10),
             size: 32,
           ),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Text(
           label,
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 12),
+          style: const TextStyle(fontSize: 12),
         ),
       ],
     );
