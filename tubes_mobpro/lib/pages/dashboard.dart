@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tubes_webpro/pages/Forum.dart';
 import 'package:tubes_webpro/pages/Home.dart';
 import 'package:tubes_webpro/pages/PemetaaanMap.dart';
 import 'package:tubes_webpro/pages/portfile.dart';
@@ -19,7 +20,7 @@ class _DashboardState extends State<Dashboard> {
   final List<Color> _backgroundColors = [
     Colors.white, // Home color
     Colors.white, // File color
-    Colors.lightGreenAccent, // Forum color
+    Colors.white, // Forum color
     const Color.fromRGBO(38, 66, 22, 10), // ProfilePage color
   ];
 
@@ -55,7 +56,7 @@ class _DashboardState extends State<Dashboard> {
             children: const [
               Home(),
               PemetaaanMap(),
-              Center(child: Text('Forum')),
+              ForumPage(),
               ProfilePage(),
             ],
           ),
