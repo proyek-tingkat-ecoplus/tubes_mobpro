@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tubes_webpro/pages/dashboard.dart';
-import 'package:tubes_webpro/pages/portfile.dart';
+// import 'package:tubes_webpro/pages/dashboard.dart';
+// import 'package:tubes_webpro/pages/portfile.dart';
 
 class Persetujuanpages extends StatefulWidget {
   const Persetujuanpages({super.key});
@@ -17,11 +17,11 @@ class _PersetujuanpagesState extends State<Persetujuanpages> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(38, 66, 22, 10),
+      backgroundColor: const Color.fromRGBO(38, 66, 22, 10),
       body: SafeArea(
         child: Column(
           children: [
-            Container(
+            SizedBox(
               height: 150,
               child: Center(
                 child: _buildOptionButton(
@@ -35,19 +35,19 @@ class _PersetujuanpagesState extends State<Persetujuanpages> {
             ),
             Expanded(
               child: ClipRRect(
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(30),
                   topRight: Radius.circular(30),
                 ),
                 child: Container(
-                  padding: EdgeInsets.all(25),
+                  padding: const EdgeInsets.all(25),
                   color: Colors.white,
                   child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 20),
-                        Text(
+                        const SizedBox(height: 20),
+                        const Text(
                           'Aturan Persetujuan Aplikasi',
                           style: TextStyle(
                             fontSize: 24,
@@ -56,7 +56,7 @@ class _PersetujuanpagesState extends State<Persetujuanpages> {
                           ),
                           textAlign: TextAlign.left,
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         _buildRuleItem(
                             "1. Lengkapi semua dokumen yang diperlukan."),
                         _buildRuleItem(
@@ -65,8 +65,8 @@ class _PersetujuanpagesState extends State<Persetujuanpages> {
                             "3. Setujui syarat dan ketentuan yang berlaku."),
                         _buildRuleItem(
                             "4. Kirim aplikasi sebelum tenggat waktu."),
-                        SizedBox(height: 20),
-                        Text(
+                        const SizedBox(height: 20),
+                        const Text(
                           'Saya telah membaca dan memahami aturan di atas.',
                           style: TextStyle(fontSize: 16),
                         ),
@@ -80,10 +80,10 @@ class _PersetujuanpagesState extends State<Persetujuanpages> {
                                 });
                               },
                             ),
-                            Text('Setuju'),
+                            const Text('Setuju'),
                           ],
                         ),
-                        SizedBox(height: 40),
+                        const SizedBox(height: 40),
                         ElevatedButton(
                           onPressed:
                               _isAgreed // jika udh di celist munjulin button
@@ -93,14 +93,14 @@ class _PersetujuanpagesState extends State<Persetujuanpages> {
                                     }
                                   : null,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromRGBO(38, 66, 22, 10),
-                            padding: EdgeInsets.symmetric(vertical: 15),
+                            backgroundColor: const Color.fromRGBO(38, 66, 22, 10),
+                            padding: const EdgeInsets.symmetric(vertical: 15),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
                             ),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 20, right: 20),
+                          child: const Padding(
+                            padding: EdgeInsets.only(left: 20, right: 20),
                             child: Text(
                               'Kirim Persetujuan',
                               style:
@@ -125,12 +125,12 @@ class _PersetujuanpagesState extends State<Persetujuanpages> {
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: Row(
         children: [
-          Icon(Icons.check_circle, color: Colors.green),
-          SizedBox(width: 10),
+          const Icon(Icons.check_circle, color: Colors.green),
+          const SizedBox(width: 10),
           Expanded(
             child: Text(
               rule,
-              style: TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16),
             ),
           ),
         ],
@@ -143,8 +143,8 @@ class _PersetujuanpagesState extends State<Persetujuanpages> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Konfirmasi'),
-          content: Text('Apakah Anda yakin ingin mengirim persetujuan?'),
+          title: const Text('Konfirmasi'),
+          content: const Text('Apakah Anda yakin ingin mengirim persetujuan?'),
           actions: [
             TextButton(
               onPressed: () {
@@ -154,17 +154,17 @@ class _PersetujuanpagesState extends State<Persetujuanpages> {
                 //     MaterialPageRoute(builder: (context) => Dashboard(selectedIndex: 2)),
                 //   );
               },
-              child: Text('Batal'),
+              child: const Text('Batal'),
             ),
             TextButton(
               onPressed: () {
                 // Handle submission logic here
                 Navigator.of(context).pop(); // Close the dialog
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Persetujuan telah dikirim!')),
+                  const SnackBar(content: Text('Persetujuan telah dikirim!')),
                 );
               },
-              child: Text(' Kirim'),
+              child: const Text(' Kirim'),
             ),
           ],
         );
@@ -182,13 +182,13 @@ Widget _buildOptionButton({
 }) {
   return TextButton(
     style: TextButton.styleFrom(
-      padding: EdgeInsets.all(0),
+      padding: const EdgeInsets.all(0),
       alignment: Alignment.centerLeft,
     ),
     onPressed: onPressed,
     child: Row(
       children: [
-        SizedBox(width: 20),
+        const SizedBox(width: 20),
         Icon(
           icon, // Use the provided icon parameter
           color: iconColor, // Use the iconColor parameter
@@ -202,7 +202,7 @@ Widget _buildOptionButton({
             ),
           ),
         ),
-        SizedBox(width: 30), // Optional spacing on the right
+        const SizedBox(width: 30), // Optional spacing on the right
       ],
     ),
   );

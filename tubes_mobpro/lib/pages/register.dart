@@ -21,9 +21,9 @@ class _RegisterState extends State<Register> {
           padding: const EdgeInsets.only(top: 40, left: 40, right: 40),
           child: Column( mainAxisAlignment: MainAxisAlignment.start, 
             children: [
-                  SizedBox(height: 80,),
-              Text("Selamat Datang", style: TextStyle(color: Color.fromRGBO(38, 66, 22, 10), fontWeight: FontWeight.bold, fontSize: 30),),
-              SizedBox(height: 20,),
+                  const SizedBox(height: 80,),
+              const Text("Selamat Datang", style: TextStyle(color: Color.fromRGBO(38, 66, 22, 10), fontWeight: FontWeight.bold, fontSize: 30),),
+              const SizedBox(height: 20,),
               TextFormField(
               decoration: const InputDecoration(
                 hintText: 'Enter your email',
@@ -37,7 +37,7 @@ class _RegisterState extends State<Register> {
                 return null;
               },
             ),
-            SizedBox(height: 10,),
+            const SizedBox(height: 10,),
             TextFormField(
               decoration: const InputDecoration(
                 hintText: 'Nama Belakang',
@@ -51,7 +51,7 @@ class _RegisterState extends State<Register> {
                 return null;
               },
             ),
-            SizedBox(height: 10,),
+            const SizedBox(height: 10,),
             TextFormField(
               decoration: const InputDecoration(
                 hintText: 'Email',
@@ -65,7 +65,7 @@ class _RegisterState extends State<Register> {
                 return null;
               },
             ),
-            SizedBox(height: 10,),
+            const SizedBox(height: 10,),
             TextFormField(
               decoration: const InputDecoration(
                 hintText: 'Kata Sandi',
@@ -79,7 +79,7 @@ class _RegisterState extends State<Register> {
                 return null;
               },
             ),
-            SizedBox(height: 10,),
+            const SizedBox(height: 10,),
             TextFormField(
               decoration: const InputDecoration(
                 hintText: 'Tulis Ulang Kata Sandi',
@@ -93,23 +93,23 @@ class _RegisterState extends State<Register> {
                 return null;
               },
             ),
-            SizedBox(height: 20,),
+            const SizedBox(height: 20,),
               TextButton(
-              child: Text(
-                "Sign Up",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
               style: TextButton.styleFrom(
-                minimumSize: Size(1000, 50), 
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5)),),
-                backgroundColor: Color.fromRGBO(38, 66, 22, 10),
+                minimumSize: const Size(1000, 50), 
+                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5)),),
+                backgroundColor: const Color.fromRGBO(38, 66, 22, 10),
                 foregroundColor: Color (Colors.white.value), 
                 ),
               onPressed: () {
                 
               },
+              child: const Text(
+                "Sign Up",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
              ),
-             SizedBox(height: 10,),
+             const SizedBox(height: 10,),
              const Row(
                 children:  <Widget>[
                   Expanded( // expanted buat ngisi ruang yg kosong
@@ -126,20 +126,20 @@ class _RegisterState extends State<Register> {
                   ),
                 ],
               ),
-               SizedBox(height: 12,),
+               const SizedBox(height: 12,),
                         TextButton(
                           style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
+                            shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.all(Radius.circular(10)),
                             ),
-                            minimumSize: Size(1000, 40),
+                            minimumSize: const Size(1000, 40),
                             foregroundColor: Color(Colors.white.value),
-                            backgroundColor: Color.fromRGBO(250, 31, 12, 10),
+                            backgroundColor: const Color.fromRGBO(250, 31, 12, 10),
                           ),
                           onPressed: () {
                       
                           },
-                          child: Row(
+                          child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(Icons.g_mobiledata_outlined),
@@ -147,22 +147,22 @@ class _RegisterState extends State<Register> {
                             ],
                           ),
                         ),
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
               TextButton(
                           style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
+                            shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.all(Radius.circular(10)),
                             ),
                             // side: BorderSide(color: Colors.white),
-                            minimumSize: Size(1000, 40),
+                            minimumSize: const Size(1000, 40),
                             foregroundColor: Color(Colors.white.value) ,
-                            backgroundColor: Color.fromRGBO(24, 119, 242, 10),
+                            backgroundColor: const Color.fromRGBO(24, 119, 242, 10),
                           ),
                           onPressed: () {
                             
 
                           },
-                          child: Row(
+                          child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(Icons.facebook),
@@ -171,17 +171,17 @@ class _RegisterState extends State<Register> {
                             ],
                           ),
                         ),
-              SizedBox(height: 12,),
+              const SizedBox(height: 12,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     "Sudah Punya Akun?",
                     style: TextStyle(color: Color.fromRGBO(38, 66, 22, 10)),
                   ),
                   TextButton(onPressed: (){
                     Navigator.pushNamed(context, '/login');
-                  }, child: Text("Masuk di sini", style: TextStyle(decoration: TextDecoration.underline, color: Color.fromRGBO(38, 66, 22, 10), fontWeight: FontWeight.bold),)),
+                  }, child: const Text("Masuk di sini", style: TextStyle(decoration: TextDecoration.underline, color: Color.fromRGBO(38, 66, 22, 10), fontWeight: FontWeight.bold),)),
                 ],
               )
             ],

@@ -22,8 +22,8 @@ class _SplashscreenState extends State<Splashscreen> {
         context,
         PageTransition(
           type: PageTransitionType.bottomToTop, // This defines the transition effect
-          duration: Duration(milliseconds: 1000),
-          reverseDuration: Duration(milliseconds: 1000),
+          duration: const Duration(milliseconds: 1000),
+          reverseDuration: const Duration(milliseconds: 1000),
           child: const Login(), // The destination widget
         ),
       );
@@ -39,7 +39,7 @@ class _SplashscreenState extends State<Splashscreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
 
-            Icon(Icons.eco, size: 100, color: Colors.white)
+            const Icon(Icons.eco, size: 100, color: Colors.white)
                     .animate()
                     .rotate(duration: 2.seconds) // ini buat muter logo
                     .scaleXY(begin: 0.8, end: 1.5, curve: Curves.easeInCirc, duration: 1.5.seconds), // ini buat animasi logo
@@ -47,7 +47,7 @@ class _SplashscreenState extends State<Splashscreen> {
             const SizedBox(height: 20),
 
             // Text with a combination of fade, scale, and color animations
-            Text(
+            const Text(
               "EchoPluse",
               style: TextStyle(
                 color: Color.fromRGBO(38, 66, 22, 100),

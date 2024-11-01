@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tubes_webpro/pages/Home.dart';
-import 'package:tubes_webpro/pages/portfile.dart';
+// import 'package:tubes_webpro/pages/Home.dart';
+// import 'package:tubes_webpro/pages/portfile.dart';
 
 class Personaldetailpages extends StatefulWidget {
   const Personaldetailpages({super.key});
@@ -15,11 +15,11 @@ class _PersonaldetailpagesState extends State<Personaldetailpages> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color.fromRGBO(38, 66, 22, 10),
+        backgroundColor: const Color.fromRGBO(38, 66, 22, 10),
         body: SafeArea(
           child: Column(
             children: [
-              Container(
+              SizedBox(
                 height: 150,
                 child: Center(
                   child: _buildOptionButton(
@@ -33,19 +33,19 @@ class _PersonaldetailpagesState extends State<Personaldetailpages> {
               Expanded(
                 // ngambil page yang free
                 child: ClipRRect(
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(30),
                       topRight: Radius.circular(30),
                     ),
                     child: Container(
-                      padding: EdgeInsets.all(25),
+                      padding: const EdgeInsets.all(25),
                       color: Colors.white,
                       child: SingleChildScrollView(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: 20),
-                            Text(
+                            const SizedBox(height: 20),
+                            const Text(
                               'General',
                               style: TextStyle(
                                   fontSize: 20,
@@ -53,36 +53,36 @@ class _PersonaldetailpagesState extends State<Personaldetailpages> {
                                   color: Color.fromRGBO(38, 66, 22, 10)),
                               textAlign: TextAlign.left,
                             ),
-                            SizedBox(height: 20),
+                            const SizedBox(height: 20),
                             InputWidget(
                               label: 'Nama Lengkap',
                               controller: TextEditingController(),
                               obscureText: false,
                               icon: Icons.person,
                             ),
-                            SizedBox(height: 20),
+                            const SizedBox(height: 20),
                             InputWidget(
                               label: 'Email',
                               controller: TextEditingController(),
                               obscureText: false,
                               icon: Icons.email,
                             ),
-                            SizedBox(height: 20),
+                            const SizedBox(height: 20),
                             InputWidget(
                               label: 'Tanggal lahir',
                               controller: TextEditingController(),
                               obscureText: false,
                               icon: Icons.calendar_month,
                             ),
-                            SizedBox(height: 20),
+                            const SizedBox(height: 20),
                             InputWidget(
                               label: 'Nomer telepone',
                               controller: TextEditingController(),
                               obscureText: false,
                               icon: Icons.phone,
                             ),
-                            SizedBox(height: 20),
-                            Text(
+                            const SizedBox(height: 20),
+                            const Text(
                               'Alamat',
                               style: TextStyle(
                                   fontSize: 20,
@@ -90,43 +90,43 @@ class _PersonaldetailpagesState extends State<Personaldetailpages> {
                                   color: Color.fromRGBO(38, 66, 22, 10)),
                               textAlign: TextAlign.left,
                             ),
-                            SizedBox(height: 20),
+                            const SizedBox(height: 20),
                             InputWidget(
                               label: 'Kantor Cabang',
                               controller: TextEditingController(),
                               obscureText: false,
                               icon: Icons.map,
                             ),
-                            SizedBox(height: 20),
+                            const SizedBox(height: 20),
                             InputWidget(
                               label: 'Alamat Lengkap',
                               controller: TextEditingController(),
                               obscureText: false,
                               icon: Icons.add_location_rounded,
                             ),
-                            SizedBox(height: 20),
+                            const SizedBox(height: 20),
                             InputWidget(
                               label: 'Kode pos',
                               controller: TextEditingController(),
                               obscureText: false,
                               icon: Icons.card_giftcard_outlined,
                             ),
-                            SizedBox(height: 20),
+                            const SizedBox(height: 20),
                             TextButton(
                               style: TextButton.styleFrom(
-                                shape: RoundedRectangleBorder(
+                                shape: const RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(10)),
                                 ),
                                 // side: BorderSide(color: Colors.white),
-                                minimumSize: Size(1000, 40),
+                                minimumSize: const Size(1000, 40),
                                 foregroundColor: Color(Colors.white.value),
-                                backgroundColor: Color.fromRGBO(38, 66, 22, 10),
+                                backgroundColor: const Color.fromRGBO(38, 66, 22, 10),
                               ),
                               onPressed: () {
                                     Navigator.pop(context);
                               },
-                              child: Text(
+                              child: const Text(
                                 'Masuk',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 20),
@@ -178,13 +178,13 @@ Widget _buildOptionButton({
 }) {
   return TextButton(
     style: TextButton.styleFrom(
-      padding: EdgeInsets.all(0),
+      padding: const EdgeInsets.all(0),
       alignment: Alignment.centerLeft,
     ),
     onPressed: onPressed,
     child: Row(
       children: [
-        SizedBox(width: 20),
+        const SizedBox(width: 20),
         Icon(
           icon, // Use the provided icon parameter
           color: iconColor, // Use the iconColor parameter
@@ -198,7 +198,7 @@ Widget _buildOptionButton({
             ),
           ),
         ),
-        SizedBox(width: 30), // Optional spacing on the right
+        const SizedBox(width: 30), // Optional spacing on the right
       ],
     ),
   );
