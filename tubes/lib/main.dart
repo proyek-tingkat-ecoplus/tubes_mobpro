@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -12,13 +14,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: ProfilePage(),
+      home: const ProfilePage(),
     );
   }
 }
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({super.key});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -41,8 +43,8 @@ class _ProfilePageState extends State<ProfilePage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          contentPadding: EdgeInsets.all(20),
-          title: Center(
+          contentPadding: const EdgeInsets.all(20),
+          title: const Center(
             child: Text(
               'Keluar dari akun?',
               style: TextStyle(
@@ -51,7 +53,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
           ),
-          content: Text(
+          content: const Text(
             'Apakah Anda yakin untuk keluar akun?',
             textAlign: TextAlign.center,
           ),
@@ -65,18 +67,18 @@ class _ProfilePageState extends State<ProfilePage> {
                       Navigator.of(context).pop(); // Close the dialog
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromRGBO(38, 66, 22, 10),
+                      backgroundColor: const Color.fromRGBO(38, 66, 22, 10),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      minimumSize: Size(double.infinity, 50),
+                      minimumSize: const Size(double.infinity, 50),
                     ),
-                    child: Text(
+                    child: const Text(
                       'keluar',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   OutlinedButton(
                     onPressed: () {
                       Navigator.of(context).pop(); // Close the dialog
@@ -85,9 +87,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      minimumSize: Size(double.infinity, 50),
+                      minimumSize: const Size(double.infinity, 50),
                     ),
-                    child: Text('tidak', style: TextStyle(color: Colors.black)),
+                    child: const Text('tidak', style: TextStyle(color: Colors.black)),
                   ),
                 ],
               ),
@@ -106,8 +108,8 @@ class _ProfilePageState extends State<ProfilePage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          contentPadding: EdgeInsets.all(20),
-          title: Center(
+          contentPadding: const EdgeInsets.all(20),
+          title: const Center(
             child: Text(
               'Hapus Akun?',
               style: TextStyle(
@@ -116,7 +118,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
           ),
-          content: Text(
+          content: const Text(
             'Apakah Anda yakin untuk menghapus akun Anda?',
             textAlign: TextAlign.center,
           ),
@@ -130,18 +132,18 @@ class _ProfilePageState extends State<ProfilePage> {
                       Navigator.of(context).pop(); // Close the dialog
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromRGBO(38, 66, 22, 10),
+                      backgroundColor: const Color.fromRGBO(38, 66, 22, 10),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      minimumSize: Size(double.infinity, 50),
+                      minimumSize: const Size(double.infinity, 50),
                     ),
-                    child: Text(
+                    child: const Text(
                       'ya, hapus akun Saya',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   OutlinedButton(
                     onPressed: () {
                       Navigator.of(context).pop(); // Close the dialog
@@ -150,9 +152,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      minimumSize: Size(double.infinity, 50),
+                      minimumSize: const Size(double.infinity, 50),
                     ),
-                    child: Text('tidak', style: TextStyle(color: Colors.black)),
+                    child: const Text('tidak', style: TextStyle(color: Colors.black)),
                   ),
                 ],
               ),
@@ -168,61 +170,61 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: Text("Profil"),
+        title: const Text("Profil"),
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.white,
-        titleTextStyle: TextStyle(
+        titleTextStyle: const TextStyle(
           color: Color.fromRGBO(38, 66, 22, 10),
           fontSize: 22,
           fontWeight: FontWeight.bold,
         ),
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: Center(
         child: Column(
           children: [
-            SizedBox(height: 20),
-            CircleAvatar(
+            const SizedBox(height: 20),
+            const CircleAvatar(
               radius: 50,
               backgroundImage: NetworkImage(
                   'https://i.pinimg.com/originals/b5/bf/99/b5bf993ab5c801b56c52d02387788947.jpg'),
             ),
-            SizedBox(height: 10),
-            Text(
+            const SizedBox(height: 10),
+            const Text(
               'Asep Supriadi',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
-                color: Color.fromRGBO(206, 231, 195, 10),
+                color: const Color.fromRGBO(206, 231, 195, 10),
                 borderRadius: BorderRadius.circular(15),
               ),
-              child: Text(
+              child: const Text(
                 'Staff ESDM',
                 style: TextStyle(color: Colors.black),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Expanded(
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Color.fromRGBO(38, 66, 22, 10),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(30),
                     topRight: Radius.circular(30),
                   ),
                 ),
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 child: ListView(
                   children: [
-                    Text(
+                    const Text(
                       'General',
                       style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     ProfileOption(
                       icon: Icons.person,
                       color: Colors.black,
@@ -238,7 +240,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => BantuanPage()),
+                          MaterialPageRoute(builder: (context) => const BantuanPage()),
                         );
                       },
                     ),
@@ -250,18 +252,21 @@ class _ProfilePageState extends State<ProfilePage> {
                       textColor: Colors.red,
                       iconColor: Colors.red,
                     ),
-                    SizedBox(height: 20),
-                    Text(
+                    const SizedBox(height: 20),
+                    const Text(
                       'Aksi Akun',
                       style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     ProfileOption(
                       icon: Icons.lock,
                       color: Colors.black,
                       text: 'Kata Sandi',
                       onPressed: () {
-                        // Add password action
+                       Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const ChangePasswordPage()),
+                        );
                       },
                     ),
                     ProfileOption(
@@ -307,7 +312,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Color.fromRGBO(38, 66, 22, 10),
+        selectedItemColor: const Color.fromRGBO(38, 66, 22, 10),
         unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
       ),
@@ -323,7 +328,7 @@ class ProfileOption extends StatelessWidget {
   final Color textColor;
   final Color iconColor;
 
-  ProfileOption({
+  const ProfileOption({super.key, 
     required this.icon,
     required this.color,
     required this.text,
@@ -355,7 +360,7 @@ class ProfileOption extends StatelessWidget {
               size: 25,
             ),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Expanded(
             child: Text(
               text,
@@ -373,21 +378,95 @@ class ProfileOption extends StatelessWidget {
   }
 }
 
-class BantuanPage extends StatelessWidget {
-  const BantuanPage({Key? key}) : super(key: key);
+class ChangePasswordPage extends StatelessWidget {
+  const ChangePasswordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(38, 66, 22, 10),
-        title: Text("Bantuan", style: TextStyle(color: Colors.white)),
+        title: const Text("Kata sandi"),
+        backgroundColor: const Color.fromRGBO(38, 66, 22, 10),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.lock,
+              size: 100,
+              color: Color.fromRGBO(38, 66, 22, 10),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Ubah Kata Sandi',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              'Tambah Kata Sandi',
+              style: TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+            const SizedBox(height: 30),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Kata Sandi',
+                prefixIcon: const Icon(Icons.lock),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              obscureText: true,
+            ),
+            const SizedBox(height: 20),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Kata Sandi Baru',
+                prefixIcon: const Icon(Icons.lock),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              obscureText: true,
+            ),
+            const SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromRGBO(38, 66, 22, 10),
+                minimumSize: const Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Text('Simpan', 
+              style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class BantuanPage extends StatelessWidget {
+  const BantuanPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color.fromRGBO(38, 66, 22, 10),
+        title: const Text("Bantuan", style: TextStyle(color: Colors.white)),
         centerTitle: true,
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Container(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
@@ -395,7 +474,7 @@ class BantuanPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'Kenapa bumi itu bulat?',
                 style: TextStyle(
                   fontSize: 18,
@@ -403,7 +482,7 @@ class BantuanPage extends StatelessWidget {
                   color: Color.fromRGBO(38, 66, 22, 10),
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
                 'Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. '
                 'Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, '
