@@ -26,10 +26,33 @@ class ForumPage extends StatefulWidget {
 
 class _ForumPageState extends State<ForumPage> {
   int _selectedIndex = 0;
+  // Daftar data forum yang akan ditampilkan
+  List<Map<String, String>> forumPosts = [
+    {
+      'title': 'Infrastruktur terbaru',
+      'author': 'Rendy Nugraha',
+      'timeAgo': '2 jam lalu',
+      'role': 'Kepala Staff',
+      'content': 'Infrastruktur terbaru dimana kita akan menempatkan beberapa kincir air di desa dengan debit dan arus air yang...',
+    },
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+    });
+  }
+
+  void _deletePost(int index) {
+    setState(() {
+      forumPosts.removeAt(index); // Menghapus item dari daftar
+    });
+  }
+
+  // Fungsi untuk menambahkan post baru ke dalam daftar
+  void _addNewPost(Map<String, String> newPost) {
+    setState(() {
+      forumPosts.insert(0, newPost); // Menambah post baru ke posisi paling atas
     });
   }
 
@@ -71,12 +94,14 @@ class _ForumPageState extends State<ForumPage> {
                 ),
                 SizedBox(width: 10),
                 ElevatedButton.icon(
-                  onPressed: () {
-                    Navigator.push(
+                  onPressed: () async {
+                    final newPost = await Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => TambahForumPage()),
-                      
                     );
+                    if (newPost != null) {
+                      _addNewPost(newPost); // Tambahkan post baru ke dalam daftar
+                    }
                   },
                   icon: Icon(
                     Icons.add,
@@ -98,17 +123,17 @@ class _ForumPageState extends State<ForumPage> {
             SizedBox(height: 20),
             Expanded(
               child: ListView.builder(
-                itemCount: 4, // Number of forum posts
+                itemCount: forumPosts.length,
                 itemBuilder: (context, index) {
+                  final post = forumPosts[index];
                   return PostCard(
-                    title: 'Infrastruktur terbaru',
-                    author: 'Rendy Nugraha',
-                    timeAgo: '2 jam lalu',
-                    role: 'Kepala Staff',
-                    content:
-                        'Infrastruktur terbaru dimana kita akan menempatkan beberapa kincir air di desa dengan debit dan arus air yang...',
+                    title: post['title']!,
+                    author: post['author']!,
+                    timeAgo: post['timeAgo']!,
+                    role: post['role']!,
+                    content: post['content']!,
                     onDelete: () {
-                      // Action for delete button
+                      _deletePost(index); // Panggil fungsi untuk menghapus forum
                     },
                   );
                 },
@@ -146,6 +171,9 @@ class _ForumPageState extends State<ForumPage> {
 }
 
 class TambahForumPage extends StatelessWidget {
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _contentController = TextEditingController();
+
   void _showPostConfirmationDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -179,7 +207,6 @@ class TambahForumPage extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pop();
-                  // Navigate to the created forum page
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color.fromRGBO(38, 66, 22, 10),
@@ -189,20 +216,6 @@ class TambahForumPage extends StatelessWidget {
                   minimumSize: Size(double.infinity, 50),
                 ),
                 child: Text('lihat forum', style: TextStyle(color: Colors.white)),
-              ),
-              SizedBox(height: 10),
-              OutlinedButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  // Navigate to explore other forums
-                },
-                style: OutlinedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  minimumSize: Size(double.infinity, 50),
-                ),
-                child: Text('lihat forum lain', style: TextStyle(color: Colors.black)),
               ),
             ],
           ),
@@ -219,7 +232,6 @@ class TambahForumPage extends StatelessWidget {
           "Tambah Forum",
           style: TextStyle(color: Colors.white),
         ),
-
         centerTitle: true,
         backgroundColor: Color.fromRGBO(38, 66, 22, 10),
       ),
@@ -233,6 +245,7 @@ class TambahForumPage extends StatelessWidget {
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             TextField(
+              controller: _titleController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Masukkan judul forum',
@@ -252,6 +265,7 @@ class TambahForumPage extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
+                    controller: _contentController,
                     maxLines: null,
                     decoration: InputDecoration(
                       hintText: 'Tulis pertanyaan di sini...',
@@ -279,7 +293,14 @@ class TambahForumPage extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    _showPostConfirmationDialog(context);
+                    final newPost = {
+                      'title': _titleController.text,
+                      'author': 'Pengguna', // Pengguna default
+                      'timeAgo': 'Baru saja',
+                      'role': 'Anggota',
+                      'content': _contentController.text,
+                    };
+                    Navigator.pop(context, newPost); // Kirim post baru ke ForumPage
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color.fromRGBO(38, 66, 22, 10),
@@ -318,65 +339,49 @@ class PostCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      elevation: 2,
       margin: EdgeInsets.symmetric(vertical: 8),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                Expanded(
-                  child: Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromRGBO(38, 66, 22, 10),
+                CircleAvatar(
+                  backgroundColor: Colors.grey[300],
+                  child: Text(author[0].toUpperCase()),
+                ),
+                SizedBox(width: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      author,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
+                    Text('$timeAgo • $role'),
+                  ],
                 ),
+                Spacer(),
                 IconButton(
-                  icon: Icon(Icons.delete, color: Colors.red),
+                  icon: Icon(Icons.delete , color: Colors.red),
                   onPressed: onDelete,
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Text(
-                  author,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(width: 10),
-                Text(
-                  timeAgo,
-                  style: TextStyle(fontSize: 12, color: Colors.grey),
-                ),
-                SizedBox(width: 10),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: Color.fromRGBO(206, 231, 195, 10),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    role,
-                    style: TextStyle(fontSize: 12),
-                  ),
                 ),
               ],
             ),
             SizedBox(height: 10),
             Text(
-              content,
-              style: TextStyle(fontSize: 14, color: Colors.black),
+              title,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 5),
+            Text(content
             ),
             SizedBox(height: 10),
             Row(
@@ -399,6 +404,7 @@ class PostCard extends StatelessWidget {
                 ),
               ],
             ),
+
           ],
         ),
       ),
