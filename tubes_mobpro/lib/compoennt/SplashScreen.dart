@@ -50,7 +50,7 @@ class _SplashscreenState extends State<Splashscreen> {
 
             // Text with a combination of fade, scale, and color animations
             const Text(
-              "EchoPluse",
+              "EcoPulse",
               style: TextStyle(
                 color: Color.fromRGBO(38, 66, 22, 100),
                 fontSize: 30,

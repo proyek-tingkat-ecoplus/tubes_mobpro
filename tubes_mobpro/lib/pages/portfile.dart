@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tubes_webpro/pages/PersetujuanPages.dart';
+import 'package:tubes_webpro/pages/PersonalDetailPages.dart';
 import 'dart:io';
+
+import 'package:tubes_webpro/pages/help.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -149,114 +153,133 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            const ImagePickerWidget(), // Added the ImagePickerWidget here
-            const SizedBox(height: 20),
-            const Text(
-              'Asep Supriadi',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 5),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              decoration: BoxDecoration(
-                color: const Color.fromRGBO(206, 231, 195, 10),
-                borderRadius: BorderRadius.circular(15),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              const ImagePickerWidget(), // Added the ImagePickerWidget here
+              const SizedBox(height: 20),
+              const Text(
+                'Asep Supriadi',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-              child: const Text(
-                'Staff ESDM',
-                style: TextStyle(color: Colors.black),
+              const SizedBox(height: 5),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(206, 231, 195, 10),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: const Text(
+                  'Staff ESDM',
+                  style: TextStyle(color: Colors.black),
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Color.fromRGBO(38, 66, 22, 10),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
+              const SizedBox(height: 20),
+              Expanded(
+                child: ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
+                    ),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Color.fromRGBO(38, 66, 22, 10),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30),
+                      ),
+                    ),
+                    padding: const EdgeInsets.all(20),
+                    child: ListView(
+                      children: [
+                        const Text(
+                          'General',
+                          style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 10),
+                        ProfileOption(
+                          icon: Icons.person,
+                          color: Colors.black,
+                          text: 'Info Personal',
+                          onPressed: () {
+                              Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Personaldetailpages()),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 15),
+                        ProfileOption(
+                          icon: Icons.help_outline,
+                          color: Colors.black,
+                          text: 'Bantuan',
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => HelpPage()),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 15),
+                        ProfileOption(
+                          icon: Icons.logout,
+                          color: Colors.red,
+                          text: 'Keluar',
+                          onPressed: _showLogoutDialog,
+                          textColor: Colors.red,
+                          iconColor: Colors.red,
+                        ),
+                        const SizedBox(height: 20),
+                        const Text(
+                          'Aksi Akun',
+                          style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 10),
+                        ProfileOption(
+                          icon: Icons.lock,
+                          color: Colors.black,
+                          text: 'Kata Sandi',
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const ChangePasswordPage()),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 15),
+                        ProfileOption(
+                          icon: Icons.check_circle,
+                          color: Colors.black,
+                          text: 'Persetujuan',
+                          onPressed: () {
+                              Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Persetujuanpages()),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 15),
+                        ProfileOption(
+                          icon: Icons.delete,
+                          color: Colors.red,
+                          text: 'Hapus Akun',
+                          onPressed: _showDeleteAccountDialog,
+                          textColor: Colors.red,
+                          iconColor: Colors.red,
+                        ),
+                        const SizedBox(height: 10),
+                      ],
+                    ),
                   ),
                 ),
-                padding: const EdgeInsets.all(20),
-                child: ListView(
-                  children: [
-                    const Text(
-                      'General',
-                      style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 10),
-                    ProfileOption(
-                      icon: Icons.person,
-                      color: Colors.black,
-                      text: 'Info Personal',
-                      onPressed: () {},
-                    ),
-                    const SizedBox(height: 15),
-                    ProfileOption(
-                      icon: Icons.help_outline,
-                      color: Colors.black,
-                      text: 'Bantuan',
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const BantuanPage()),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 15),
-                    ProfileOption(
-                      icon: Icons.logout,
-                      color: Colors.red,
-                      text: 'Keluar',
-                      onPressed: _showLogoutDialog,
-                      textColor: Colors.red,
-                      iconColor: Colors.red,
-                    ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      'Aksi Akun',
-                      style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 10),
-                    ProfileOption(
-                      icon: Icons.lock,
-                      color: Colors.black,
-                      text: 'Kata Sandi',
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const ChangePasswordPage()),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 15),
-                    ProfileOption(
-                      icon: Icons.check_circle,
-                      color: Colors.black,
-                      text: 'Persetujuan',
-                      onPressed: () {},
-                    ),
-                    const SizedBox(height: 15),
-                    ProfileOption(
-                      icon: Icons.delete,
-                      color: Colors.red,
-                      text: 'Hapus Akun',
-                      onPressed: _showDeleteAccountDialog,
-                      textColor: Colors.red,
-                      iconColor: Colors.red,
-                    ),
-                    const SizedBox(height: 10),
-                  ],
-                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      );
+    );
   }
 }
 

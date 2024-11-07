@@ -8,5 +8,5 @@ void main() async {
   final showOnboarding = prefs.getBool('showOnboarding') ?? true;
 
   runApp(Routes(showOnboarding: showOnboarding));
-}
+} 
 
