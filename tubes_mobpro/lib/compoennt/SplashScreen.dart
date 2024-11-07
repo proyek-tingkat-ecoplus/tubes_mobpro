@@ -57,11 +57,15 @@ class _SplashscreenState extends State<Splashscreen> {
                 fontWeight: FontWeight.bold,
               ),
             )
-            .animate()
-            .fadeIn(duration: 1.5.seconds)
-            .scaleXY(begin: 0.5, end: 1.0, curve: Curves.easeInOut, duration: 1.seconds)
-            .then() // Color transition effect
-            .tint(color: Colors.white, duration: 1.seconds)
+                .animate()
+                .fadeIn(duration: 1.5.seconds)
+                .scaleXY(
+                    begin: 0.5,
+                    end: 1.0,
+                    curve: Curves.easeInOut,
+                    duration: 1.seconds)
+                .then() // Color transition effect
+                .tint(color: Colors.white, duration: 1.seconds)
           ],
         ),
       ),

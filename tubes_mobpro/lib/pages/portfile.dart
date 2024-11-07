@@ -5,6 +5,7 @@ import 'package:tubes_webpro/pages/PersonalDetailPages.dart';
 import 'dart:io';
 
 import 'package:tubes_webpro/pages/help.dart';
+import 'package:tubes_webpro/pages/profile_details.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -207,7 +208,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           onPressed: () {
                               Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => Personaldetailpages()),
+                              MaterialPageRoute(builder: (context) => PersonalDetails()),
                             );
                           },
                         ),
@@ -594,3 +595,4 @@ class BantuanPage extends StatelessWidget {
     );
   }
 }
+
