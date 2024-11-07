@@ -141,6 +141,7 @@ class _ForumPageState extends State<ForumPage> {
   }
 }
 
+
 class TambahForumPage extends StatelessWidget {
   final TextEditingController _titleController = TextEditingController();
   final _controller = QuillController.basic();
