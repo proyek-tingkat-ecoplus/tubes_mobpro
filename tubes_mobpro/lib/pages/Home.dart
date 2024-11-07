@@ -49,11 +49,65 @@ class Home extends StatelessWidget {
             icon: const Icon(Icons.notifications_active_rounded),
             tooltip: 'Notifikasi',
             onPressed: () {
-              
+              showDialog(
+                context: context,
+                 builder: (context) => AlertDialog(
+                  actions: [
+                    TextButton(onPressed: (){
+                      Navigator.of(context).pop();
+                    }, 
+                    child: const Text('Tutup')
+                    )
+                  ],
+                  title: Text('Notifikasi'),
+                  content: Container(
+                    height: 300,
+                    width: 300,
+                    
+                    child: ListView(
+                      children: [
+                        Container(
+                          height: 50,
+                          width: 200,
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                            )
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Selamat! Proposal anda diterima',
+                              style: TextStyle(color: Colors.white)
+                            )
+                          )
+                        ),
+                        SizedBox(height: 5,),
+                        Container(
+                          height: 50,
+                          width: 200,
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                            )
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Selamat! Proposal anda diterima',
+                              style: TextStyle(color: Colors.white)
+                            )
+                          )
+                        ) 
+                      ],
+                    ),
+                  ),
+                 )
+              );
             }, 
           ),
-          const SizedBox(width: 16),
-          const CircleAvatar(
+          SizedBox(width: 16),
+          CircleAvatar(
             backgroundImage: NetworkImage('https://example.com/profile.jpg'), // URL gambar profil
           ),
           const SizedBox(width: 16),
@@ -82,18 +136,9 @@ class Home extends StatelessWidget {
 
               // Image banner (example)
               Container(
-                height: 150,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Center(
-                  child: Text(
-                    'Banner Image',
-                    style: TextStyle(color: Colors.white),
+                  child: Center(
+                    child: Image.asset('assets/banner.jpeg')
                   ),
-                ),
               ),
               const SizedBox(height: 16),
 
@@ -106,12 +151,38 @@ class Home extends StatelessWidget {
               GridView.count(
                 crossAxisCount: 4,
                 shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
+                physics: NeverScrollableScrollPhysics(),
+                mainAxisSpacing: 16,
+                crossAxisSpacing: 16,
                 children: [
-                  _buildMenuItem(Icons.people, 'Role\nManagement'),
-                  _buildMenuItem(Icons.forum, 'Forum\nManagement'),
-                  _buildMenuItem(Icons.file_present, 'Pengajuan\nProposal'),
-                  _buildMenuItem(Icons.book, 'Pemantauan\nInformasi'),
+                  _buildMenuButton(
+                    icon: Icons.person_outline,
+                    label: 'Role\nManagement',
+                    onPressed: () {
+                      print('Role Management clicked');
+                    },
+                  ),
+                  _buildMenuButton(
+                    icon: Icons.chat_bubble_outline,
+                    label: 'Forum\nManagement',
+                    onPressed: () {
+                      print('Forum Management clicked');
+                    },
+                  ),
+                  _buildMenuButton(
+                    icon: Icons.description_outlined,
+                    label: 'Peninjauan\nProposal',
+                    onPressed: () {
+                      print('Peninjauan Proposal clicked');
+                    },
+                  ),
+                  _buildMenuButton(
+                    icon: Icons.map_outlined,
+                    label: 'Pemetaan\nInfrastruktur',
+                    onPressed: () {
+                      print('Pemetaan Infrastruktur clicked');
+                    },
+                  ),
                 ],
               ),
               const SizedBox(height: 16),
@@ -182,29 +253,37 @@ class Home extends StatelessWidget {
     );
   }
 }
-
+  
 // Function to build menu item
-  Widget _buildMenuItem(IconData icon, String label) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.green[50],
-            shape: BoxShape.circle,
-          ),
-          child: Icon(
-            icon,
-            color: const Color.fromRGBO(38, 66, 22, 10),
-            size: 32,
-          ),
+   Widget _buildMenuButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onPressed,
+  }) {
+    return OutlinedButton(
+      onPressed: onPressed,
+      style: OutlinedButton.styleFrom(
+        side: BorderSide(color: Color.fromRGBO(38, 66, 22, 10), width: 1.5),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
         ),
-        const SizedBox(height: 8),
-        Text(
-          label,
-          textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 12),
-        ),
-      ],
+        padding: EdgeInsets.symmetric(vertical: 16),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, size: 40, color: Color.fromRGBO(38, 66, 22, 10)),
+          SizedBox(height: 8),
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 12,
+              color: Color.fromRGBO(38, 66, 22, 10),
+            ),
+          ),
+        ],
+      ),
     );
   }
