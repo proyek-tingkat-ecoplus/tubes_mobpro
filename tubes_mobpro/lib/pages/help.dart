@@ -38,7 +38,7 @@ class HelpPage extends StatelessWidget {
     }
   ];
 
-  const HelpPage({super.key});
+  HelpPage({super.key});
 
   @override
   Widget build(BuildContext context) {
