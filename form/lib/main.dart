@@ -27,13 +27,14 @@ class ForumPage extends StatefulWidget {
 
 class _ForumPageState extends State<ForumPage> {
   int _selectedIndex = 0;
-  List<Map<String, String>> forumPosts = [
+  List<Map<String, dynamic>> forumPosts = [
     {
       'title': 'Infrastruktur terbaru',
       'author': 'Rendy Nugraha',
       'timeAgo': '2 jam lalu',
       'role': 'Kepala Staff',
       'content': 'Infrastruktur terbaru dimana kita akan menempatkan beberapa kincir air di desa dengan debit dan arus air yang...',
+      'comments': []
     },
   ];
 
@@ -51,7 +52,13 @@ class _ForumPageState extends State<ForumPage> {
 
   void _addNewPost(Map<String, String> newPost) {
     setState(() {
-      forumPosts.insert(0, newPost);
+      forumPosts.insert(0, {...newPost, 'comments': []});
+    });
+  }
+
+  void _addComment(int postIndex, String comment) {
+    setState(() {
+      forumPosts[postIndex]['comments'].add(comment);
     });
   }
 
@@ -123,8 +130,22 @@ class _ForumPageState extends State<ForumPage> {
                     timeAgo: post['timeAgo']!,
                     role: post['role']!,
                     content: post['content']!,
+                    comments: List<String>.from(post['comments']),
                     onDelete: () {
                       _deletePost(index);
+                    },
+                    onReply: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ReplyPage(
+                            postTitle: post['title']!,
+                            onCommentAdded: (comment) {
+                              _addComment(index, comment);
+                            },
+                          ),
+                        ),
+                      );
                     },
                   );
                 },
@@ -290,7 +311,9 @@ class PostCard extends StatelessWidget {
   final String timeAgo;
   final String role;
   final String content;
+  final List<String> comments;
   final VoidCallback onDelete;
+  final VoidCallback onReply;
 
   PostCard({
     required this.title,
@@ -298,7 +321,9 @@ class PostCard extends StatelessWidget {
     required this.timeAgo,
     required this.role,
     required this.content,
+    required this.comments,
     required this.onDelete,
+    required this.onReply,
   });
 
   @override
@@ -337,6 +362,15 @@ class PostCard extends StatelessWidget {
             SizedBox(height: 5),
             Text(content),
             SizedBox(height: 10),
+            if (comments.isNotEmpty)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: comments.map((comment) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: Text('- $comment'),
+                )).toList(),
+              ),
+            SizedBox(height: 10),
             Row(
               children: [
                 Icon(Icons.chat_bubble_outline, color: Color.fromRGBO(38, 66, 22, 10)),
@@ -344,10 +378,71 @@ class PostCard extends StatelessWidget {
                 Text('Partisipan', style: TextStyle(color: Colors.grey)),
                 Spacer(),
                 TextButton(
-                  onPressed: () {
-                    // Action for "Balas" button
-                  },
+                  onPressed: onReply,
                   child: Text('Balas', style: TextStyle(color: Color.fromRGBO(38, 66, 22, 10))),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ReplyPage extends StatelessWidget {
+  final String postTitle;
+  final ValueChanged<String> onCommentAdded;
+
+  ReplyPage({required this.postTitle, required this.onCommentAdded});
+
+  final TextEditingController _replyController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Balas ke: $postTitle', style: TextStyle(color: Colors.white)),
+        backgroundColor: Color.fromRGBO(38, 66, 22, 10),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Tulis Komentar Anda:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            TextField(
+              controller: _replyController,
+              maxLines: 5,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Masukkan komentar di sini...',
+              ),
+            ),
+            SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
+                  child: Text('Cancel', style: TextStyle(color: Colors.white)),
+                ),
+                SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    if (_replyController.text.isNotEmpty) {
+                      onCommentAdded(_replyController.text);
+                    }
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color.fromRGBO(38, 66, 22, 10),
+                  ),
+                  child: Text('Post Komentar', style: TextStyle(color: Colors.white)),
                 ),
               ],
             ),
