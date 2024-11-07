@@ -1,185 +1,423 @@
 import 'package:flutter/material.dart';
-import 'package:tubes_webpro/pages/PersetujuanPages.dart';
-import 'package:tubes_webpro/pages/PersonalDetailPages.dart';
-import 'package:tubes_webpro/pages/dashboard.dart';
-import 'package:tubes_webpro/pages/help.dart';
-import 'package:tubes_webpro/pages/page_1.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
-
-  static const routeName = '/profile';
+  static const routeName="/profile";
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  void _showLogoutDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          contentPadding: const EdgeInsets.all(20),
+          title: const Center(
+            child: Text(
+              'Keluar dari akun?',
+              style: TextStyle(
+                color: Color.fromRGBO(38, 66, 22, 10),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          content: const Text(
+            'Apakah Anda yakin untuk keluar akun?',
+            textAlign: TextAlign.center,
+          ),
+          actions: [
+            Center(
+              child: Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Close the dialog
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromRGBO(38, 66, 22, 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      minimumSize: const Size(double.infinity, 50),
+                    ),
+                    child: const Text(
+                      'keluar',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  OutlinedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Close the dialog
+                    },
+                    style: OutlinedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      minimumSize: const Size(double.infinity, 50),
+                    ),
+                    child: const Text('tidak', style: TextStyle(color: Colors.black)),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showDeleteAccountDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          contentPadding: const EdgeInsets.all(20),
+          title: const Center(
+            child: Text(
+              'Hapus Akun?',
+              style: TextStyle(
+                color: Color.fromRGBO(38, 66, 22, 10),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          content: const Text(
+            'Apakah Anda yakin untuk menghapus akun Anda?',
+            textAlign: TextAlign.center,
+          ),
+          actions: [
+            Center(
+              child: Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Close the dialog
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromRGBO(38, 66, 22, 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      minimumSize: const Size(double.infinity, 50),
+                    ),
+                    child: const Text(
+                      'ya, hapus akun Saya',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  OutlinedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Close the dialog
+                    },
+                    style: OutlinedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      minimumSize: const Size(double.infinity, 50),
+                    ),
+                    child: const Text('tidak', style: TextStyle(color: Colors.black)),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Center(
-          child: Column(
+    return Center(
+        child: Column(
+          children: [
+            const SizedBox(height: 20),
+            const ImagePickerWidget(), // Added the ImagePickerWidget here
+            const SizedBox(height: 20),
+            const Text(
+              'Asep Supriadi',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 5),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              decoration: BoxDecoration(
+                color: const Color.fromRGBO(206, 231, 195, 10),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: const Text(
+                'Staff ESDM',
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Color.fromRGBO(38, 66, 22, 10),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                  ),
+                ),
+                padding: const EdgeInsets.all(20),
+                child: ListView(
+                  children: [
+                    const Text(
+                      'General',
+                      style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 10),
+                    ProfileOption(
+                      icon: Icons.person,
+                      color: Colors.black,
+                      text: 'Info Personal',
+                      onPressed: () {},
+                    ),
+                    const SizedBox(height: 15),
+                    ProfileOption(
+                      icon: Icons.help_outline,
+                      color: Colors.black,
+                      text: 'Bantuan',
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const BantuanPage()),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 15),
+                    ProfileOption(
+                      icon: Icons.logout,
+                      color: Colors.red,
+                      text: 'Keluar',
+                      onPressed: _showLogoutDialog,
+                      textColor: Colors.red,
+                      iconColor: Colors.red,
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      'Aksi Akun',
+                      style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 10),
+                    ProfileOption(
+                      icon: Icons.lock,
+                      color: Colors.black,
+                      text: 'Kata Sandi',
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const ChangePasswordPage()),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 15),
+                    ProfileOption(
+                      icon: Icons.check_circle,
+                      color: Colors.black,
+                      text: 'Persetujuan',
+                      onPressed: () {},
+                    ),
+                    const SizedBox(height: 15),
+                    ProfileOption(
+                      icon: Icons.delete,
+                      color: Colors.red,
+                      text: 'Hapus Akun',
+                      onPressed: _showDeleteAccountDialog,
+                      textColor: Colors.red,
+                      iconColor: Colors.red,
+                    ),
+                    const SizedBox(height: 10),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+  }
+}
+
+// ImagePickerWidget
+class ImagePickerWidget extends StatefulWidget {
+  const ImagePickerWidget({super.key});
+
+  @override
+  State<ImagePickerWidget> createState() => _ImagePickerWidgetState();
+}
+
+class _ImagePickerWidgetState extends State<ImagePickerWidget> {
+  File? _image;
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImageFromGallery() async {
+    try {
+      final XFile? pickedFile = await _picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 80,
+      );
+
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+        });
+      }
+    } catch (e) {
+      debugPrint('Error picking image: $e');
+    }
+  }
+
+  Future<void> _captureImageFromCamera() async {
+    try {
+      final XFile? pickedFile = await _picker.pickImage(
+        source: ImageSource.camera,
+        imageQuality: 80,
+      );
+
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+        });
+      }
+    } catch (e) {
+      debugPrint('Error capturing image: $e');
+    }
+  }
+
+  void _showImageSourceDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: const Text(
+            'Pilih Sumber Gambar',
+            style: TextStyle(
+              color: Color.fromRGBO(38, 66, 22, 10),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(height: 30),
-              _buildHeader(),
-              SizedBox(height: 20),
-              _buildProfileImage(),
-              SizedBox(height: 10),
-              _buildProfileName(),
-              SizedBox(height: 10),
-              _buildBadge(),
-              SizedBox(height: 20),
-              _buildOptionsList(),
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Galeri'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _pickImageFromGallery();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.camera_alt),
+                title: const Text('Kamera'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _captureImageFromCamera();
+                },
+              ),
             ],
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
-  Widget _buildHeader() {
-    return Text(
-      'Profil',
-      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-    );
-  }
-
-  Widget _buildProfileImage() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(50),
-        border: Border.all(color: Color.fromRGBO(38, 66, 22, 10), width: 5),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(50),
-        child: Image.network(
-          'https://i.pinimg.com/originals/b5/bf/99/b5bf993ab5c801b56c52d02387788947.jpg',
-          width: 80,
-          height: 80,
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildProfileName() {
-    return Text(
-      'Asep Supriadi',
-      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-    );
-  }
-
-  Widget _buildBadge() {
-    return Badge(
-      label: Text("Staff sdm"),
-      backgroundColor: Color.fromRGBO(206, 231, 195, 10),
-      textColor: Colors.black,
-      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-    );
-  }
-
-  Widget _buildOptionsList() {
-    return ClipRRect(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(50),
-        topRight: Radius.circular(50),
-      ),
-      child: Container(
-        padding: EdgeInsets.all(20),
-        width: 480,
-        height: 444,
-        color: Color.fromRGBO(38, 66, 22, 10),
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: ListView(
-            children: [
-              _buildSectionTitle("General"),
-              _buildOptionButton(
-                icon: Icons.person,
-                title: 'Info personal',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Personaldetailpages()),
-                  );
-                },
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const SizedBox(height: 20),
+        GestureDetector(
+          onTap: _showImageSourceDialog,
+          child: Container(
+            width: 150,
+            height: 150,
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(75),
+              border: Border.all(
+                color: const Color.fromRGBO(38, 66, 22, 10),
+                width: 2,
               ),
-              _buildOptionButton(
-                icon: Icons.help_outline,
-                title: 'Bantuan',
-                onPressed: () {
-                 Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HelpPage()),
-                  );
-                },
-              ),
-              _buildOptionButton(
-                icon: Icons.logout,
-                title: 'Keluar',
-                titleColor: Colors.red,
-                iconColor: Colors.red,
-                onPressed: () {
-                  // Add your onPressed code here
-                },
-              ),
-              _buildSectionTitle("Aksi Akun"),
-              _buildOptionButton(
-                icon: Icons.message,
-                title: 'Kata Santdi',
-                onPressed: () {
-                  // Add your onPressed code here
-                },
-              ),
-              _buildOptionButton(
-                icon: Icons.check_circle,
-                title: 'Persetujuan',
-                  onPressed: () {
-                   Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Persetujuanpages()),
-                  );
-                },
-              ),
-              _buildOptionButton(
-                icon: Icons.delete,
-                title: 'Tutup Akun',
-                titleColor: Colors.red,
-                iconColor: Colors.red,
-                   onPressed: () {
-                  // Add your onPressed code here
-                },
-              ),
-            ],
+            ),
+            child: _image != null
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(75),
+                    child: Image.file(
+                      _image!,
+                      width: 150,
+                      height: 150,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                : const Icon(
+                    Icons.camera_alt,
+                    size: 50,
+                    color: Color.fromRGBO(38, 66, 22, 10),
+                  ),
           ),
         ),
-      ),
+        const SizedBox(height: 10),
+        Text(
+          _image != null ? 'Ketuk untuk mengubah foto' : 'Ketuk untuk menambah foto',
+          style: const TextStyle(
+            color: Color.fromRGBO(38, 66, 22, 10),
+            fontSize: 16,
+          ),
+        ),
+      ],
     );
   }
+}
 
-  Widget _buildSectionTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 0, top: 10, bottom: 10),
-      child: Text(
-        title,
-        style: TextStyle(color: Colors.white, fontSize: 20),
-      ),
-    );
-  }
+class ProfileOption extends StatelessWidget {
+  final IconData icon;
+  final Color color;
+  final String text;
+  final VoidCallback onPressed;
+  final Color textColor;
+  final Color iconColor;
 
-  Widget _buildOptionButton({
-    required IconData icon,
-    required String title,
-    Color titleColor = Colors.white,
-    Color iconColor = Colors.black,
-    required VoidCallback onPressed,
-  }) {
+  const ProfileOption({
+    super.key,
+    required this.icon,
+    required this.color,
+    required this.text,
+    required this.onPressed,
+    this.textColor = Colors.white,
+    this.iconColor = Colors.black,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return TextButton(
       style: TextButton.styleFrom(
-        padding: EdgeInsets.all(0),
+        padding: EdgeInsets.zero,
         alignment: Alignment.centerLeft,
       ),
       onPressed: onPressed,
@@ -190,7 +428,7 @@ class _ProfilePageState extends State<ProfilePage> {
             height: 40,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
               icon,
@@ -198,19 +436,137 @@ class _ProfilePageState extends State<ProfilePage> {
               size: 25,
             ),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Expanded(
             child: Text(
-              title,
-              style: TextStyle(color: titleColor, fontSize: 20),
+              text,
+              style: TextStyle(color: textColor, fontSize: 18),
             ),
           ),
           Icon(
-            Icons.arrow_forward,
-            color: titleColor,
-            size: 30,
+            Icons.arrow_forward_ios,
+            color: textColor,
+            size: 20,
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ChangePasswordPage extends StatelessWidget {
+  const ChangePasswordPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Kata sandi"),
+        backgroundColor: const Color.fromRGBO(38, 66, 22, 10),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.lock,
+              size: 100,
+              color: Color.fromRGBO(38, 66, 22, 10),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Ubah Kata Sandi',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              'Tambah Kata Sandi',
+              style: TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+            const SizedBox(height: 30),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Kata Sandi',
+                prefixIcon: const Icon(Icons.lock),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              obscureText: true,
+            ),
+            const SizedBox(height: 20),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Kata Sandi Baru',
+                prefixIcon: const Icon(Icons.lock),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              obscureText: true,
+            ),
+            const SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromRGBO(38, 66, 22, 10),
+                minimumSize: const Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Text('Simpan', style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class BantuanPage extends StatelessWidget {
+  const BantuanPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color.fromRGBO(38, 66, 22, 10),
+        title: const Text("Bantuan", style: TextStyle(color: Colors.white)),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Container(
+          padding: const EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Kenapa bumi itu bulat?',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromRGBO(38, 66, 22, 10),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. '
+                'Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, '
+                'mattis ligula consectetur, ultrices mauris.',
+                style: TextStyle(fontSize: 16, color: Colors.grey[800]),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

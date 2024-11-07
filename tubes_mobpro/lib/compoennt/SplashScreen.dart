@@ -26,7 +26,7 @@ class _SplashscreenState extends State<Splashscreen> {
           type: PageTransitionType.bottomToTop, // This defines the transition effect
           duration: const Duration(milliseconds: 1000),
           reverseDuration: const Duration(milliseconds: 1000),
-          child: this.widget.Pages, // The destination widget
+          child: widget.Pages, // The destination widget
         ),
       );
     });

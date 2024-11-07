@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ForumPage extends StatefulWidget {
-  const ForumPage({Key? key}) : super(key: key);
+  const ForumPage({super.key});
 
   @override
   State<ForumPage> createState() => _ForumPageState();
@@ -105,6 +105,8 @@ class _ForumPageState extends State<ForumPage> {
 }
 
 class TambahForumPage extends StatelessWidget {
+  const TambahForumPage({super.key});
+
   void _showPostConfirmationDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -265,7 +267,7 @@ class PostCard extends StatelessWidget {
   final String content;
   final VoidCallback onDelete;
 
-  PostCard({
+  const PostCard({super.key, 
     required this.title,
     required this.author,
     required this.timeAgo,
