@@ -240,7 +240,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                             onPressed: _submitForm,
                             style: TextButton.styleFrom(
                               backgroundColor: Color.fromRGBO(38, 66, 22, 1),
-                              minimumSize: Size(200, 50),
+                              minimumSize: Size(500, 50),
                               padding: EdgeInsets.symmetric(
                                   vertical: 12, horizontal: 20),
                             ),
