@@ -5,7 +5,9 @@ import 'package:page_transition/page_transition.dart';
 import 'package:tubes_webpro/pages/login.dart';
 
 class Splashscreen extends StatefulWidget {
-  const Splashscreen({super.key});
+  const Splashscreen({super.key, required this.Pages});
+
+  final Widget Pages;
 
   @override
   State<Splashscreen> createState() => _SplashscreenState();
@@ -24,7 +26,7 @@ class _SplashscreenState extends State<Splashscreen> {
           type: PageTransitionType.bottomToTop, // This defines the transition effect
           duration: const Duration(milliseconds: 1000),
           reverseDuration: const Duration(milliseconds: 1000),
-          child: const Login(), // The destination widget
+          child: this.widget.Pages, // The destination widget
         ),
       );
     });
