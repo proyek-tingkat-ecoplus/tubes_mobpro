@@ -6,6 +6,7 @@ import 'package:tubes_webpro/pages/page_1.dart';
 import 'package:tubes_webpro/pages/portfile.dart';
 import 'package:tubes_webpro/pages/register.dart';
 import 'package:tubes_webpro/pages/dashboard.dart';
+import 'package:tubes_webpro/pages/profile_details.dart';
 
 class Routes extends StatelessWidget {
   const Routes({super.key});
@@ -22,6 +23,7 @@ class Routes extends StatelessWidget {
         Register.routeName: (context) => const Register(),
         Dashboard.routeName: (context) => const Dashboard(),
         ProfilePage.routeName: (context) => const ProfilePage(),
+        PersonalDetails.routeName: (context) => PersonalDetails(),
       },
     );
   }

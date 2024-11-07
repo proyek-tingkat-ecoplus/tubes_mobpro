@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tubes_webpro/pages/dashboard.dart';
-import 'package:tubes_webpro/pages/page_1.dart';
+import './profile_details.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -87,7 +87,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const Page_1()),
+                                  builder: (context) => PersonalDetails()),
                             );
                           },
                           child: Row(
