@@ -38,6 +38,8 @@ class HelpPage extends StatelessWidget {
     }
   ];
 
+  const HelpPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +47,7 @@ class HelpPage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            Container(
+            SizedBox(
               height: 150,
               child: Center(
                 child: _buildOptionButton(

@@ -13,7 +13,7 @@ class PemetaaanMap extends StatefulWidget {
 class _PemetaaanMapState extends State<PemetaaanMap> {
   late GoogleMapController _mapController;
   Map<String, MarkerData> markerInfo = {};
-  List<Marker> _markers = [];
+  final List<Marker> _markers = [];
   final SearchControllers = TextEditingController();
 
   @override
@@ -105,14 +105,15 @@ class _PemetaaanMapState extends State<PemetaaanMap> {
             },
             suggestionsCallback: (pattern) async {
               // ini buat dapetin data yang ngebalikin location callback
-              if (pattern.isEmpty)
+              if (pattern.isEmpty) {
                 return null;
-              else
+              } else {
                 try {
                   return await locationFromAddress(pattern); // ini https://pub.dev/packages/geocoding // ini buat nyari location
                 } catch (e) {
                   return null;
                 }
+              }
             },
             itemBuilder: (context, Location suggestion) {
               // widget fluutter for asign operation

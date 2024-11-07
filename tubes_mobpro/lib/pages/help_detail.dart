@@ -13,7 +13,7 @@ class HelpDetailPage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            Container(
+            SizedBox(
               height: 150,
               child: Center(
                 child: _buildOptionButton(
