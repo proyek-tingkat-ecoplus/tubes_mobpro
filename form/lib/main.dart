@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 
 void main() {
   runApp(MyApp());
@@ -26,7 +27,6 @@ class ForumPage extends StatefulWidget {
 
 class _ForumPageState extends State<ForumPage> {
   int _selectedIndex = 0;
-  // Daftar data forum yang akan ditampilkan
   List<Map<String, String>> forumPosts = [
     {
       'title': 'Infrastruktur terbaru',
@@ -45,14 +45,13 @@ class _ForumPageState extends State<ForumPage> {
 
   void _deletePost(int index) {
     setState(() {
-      forumPosts.removeAt(index); // Menghapus item dari daftar
+      forumPosts.removeAt(index);
     });
   }
 
-  // Fungsi untuk menambahkan post baru ke dalam daftar
   void _addNewPost(Map<String, String> newPost) {
     setState(() {
-      forumPosts.insert(0, newPost); // Menambah post baru ke posisi paling atas
+      forumPosts.insert(0, newPost);
     });
   }
 
@@ -62,14 +61,12 @@ class _ForumPageState extends State<ForumPage> {
       appBar: AppBar(
         title: Text("Forum Diskusi"),
         centerTitle: true,
-        elevation: 0,
         backgroundColor: Color.fromRGBO(38, 66, 22, 10),
         titleTextStyle: TextStyle(
           color: Colors.white,
           fontSize: 22,
           fontWeight: FontWeight.bold,
         ),
-        iconTheme: IconThemeData(color: Colors.black),
       ),
       backgroundColor: Colors.grey[200],
       body: Padding(
@@ -100,17 +97,11 @@ class _ForumPageState extends State<ForumPage> {
                       MaterialPageRoute(builder: (context) => TambahForumPage()),
                     );
                     if (newPost != null) {
-                      _addNewPost(newPost); // Tambahkan post baru ke dalam daftar
+                      _addNewPost(newPost);
                     }
                   },
-                  icon: Icon(
-                    Icons.add,
-                    color: Colors.white,
-                  ),
-                  label: Text(
-                    'Tambah', 
-                    style: TextStyle(color: Colors.white)
-                  ),
+                  icon: Icon(Icons.add, color: Colors.white),
+                  label: Text('Tambah', style: TextStyle(color: Colors.white)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color.fromRGBO(38, 66, 22, 10),
                     shape: RoundedRectangleBorder(
@@ -133,7 +124,7 @@ class _ForumPageState extends State<ForumPage> {
                     role: post['role']!,
                     content: post['content']!,
                     onDelete: () {
-                      _deletePost(index); // Panggil fungsi untuk menghapus forum
+                      _deletePost(index);
                     },
                   );
                 },
@@ -144,22 +135,10 @@ class _ForumPageState extends State<ForumPage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.file_copy),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.message),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: '',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: ''),
+          BottomNavigationBarItem(icon: Icon(Icons.file_copy), label: ''),
+          BottomNavigationBarItem(icon: Icon(Icons.message), label: ''),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: ''),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Color.fromRGBO(38, 66, 22, 10),
@@ -172,7 +151,7 @@ class _ForumPageState extends State<ForumPage> {
 
 class TambahForumPage extends StatelessWidget {
   final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _contentController = TextEditingController();
+  final _controller = QuillController.basic();
 
   void _showPostConfirmationDialog(BuildContext context) {
     showDialog(
@@ -197,10 +176,7 @@ class TambahForumPage extends StatelessWidget {
             children: [
               Text(
                 'klik di sini untuk melihat forum yang telah Anda buat!',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold
-                ),
+                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 20),
@@ -228,10 +204,7 @@ class TambahForumPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Tambah Forum",
-          style: TextStyle(color: Colors.white),
-        ),
+        title: Text("Tambah Forum", style: TextStyle(color: Colors.white)),
         centerTitle: true,
         backgroundColor: Color.fromRGBO(38, 66, 22, 10),
       ),
@@ -240,10 +213,7 @@ class TambahForumPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Judul Forum',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
+            Text('Judul Forum', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             TextField(
               controller: _titleController,
               decoration: InputDecoration(
@@ -252,10 +222,7 @@ class TambahForumPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16),
-            Text(
-              'Isi Forum',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
+            Text('Isi Forum', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
@@ -264,13 +231,19 @@ class TambahForumPage extends StatelessWidget {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: _contentController,
-                    maxLines: null,
-                    decoration: InputDecoration(
-                      hintText: 'Tulis pertanyaan di sini...',
-                      border: InputBorder.none,
-                    ),
+                  child: Column(
+                    children: [
+                      QuillSimpleToolbar(
+                        controller: _controller,
+                        configurations: const QuillSimpleToolbarConfigurations(),
+                      ),
+                      Expanded(
+                        child: QuillEditor.basic(
+                          controller: _controller,
+                          configurations: const QuillEditorConfigurations(),
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ),
@@ -283,32 +256,24 @@ class TambahForumPage extends StatelessWidget {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey,
-                  ),
-                  child: Text(
-                    'Cancel',
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
+                  child: Text('Cancel', style: TextStyle(color: Colors.white)),
                 ),
                 ElevatedButton(
                   onPressed: () {
                     final newPost = {
                       'title': _titleController.text,
-                      'author': 'Pengguna', // Pengguna default
+                      'author': 'Pengguna',
                       'timeAgo': 'Baru saja',
                       'role': 'Anggota',
-                      'content': _contentController.text,
+                      'content': _controller.document.toPlainText(), // Get content from Quill
                     };
-                    Navigator.pop(context, newPost); // Kirim post baru ke ForumPage
+                    Navigator.pop(context, newPost);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color.fromRGBO(38, 66, 22, 10),
                   ),
-                  child: Text(
-                    'Post ke Forum',
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  child: Text('Post ke Forum', style: TextStyle(color: Colors.white)),
                 ),
               ],
             ),
@@ -356,55 +321,36 @@ class PostCard extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      author,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    Text(author, style: TextStyle(fontWeight: FontWeight.bold)),
                     Text('$timeAgo • $role'),
                   ],
                 ),
                 Spacer(),
                 IconButton(
-                  icon: Icon(Icons.delete , color: Colors.red),
+                  icon: Icon(Icons.delete, color: Colors.red),
                   onPressed: onDelete,
                 ),
               ],
             ),
             SizedBox(height: 10),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            Text(title, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             SizedBox(height: 5),
-            Text(content
-            ),
+            Text(content),
             SizedBox(height: 10),
             Row(
               children: [
                 Icon(Icons.chat_bubble_outline, color: Color.fromRGBO(38, 66, 22, 10)),
                 SizedBox(width: 5),
-                Text(
-                  'Partisipan',
-                  style: TextStyle(color: Colors.grey),
-                ),
+                Text('Partisipan', style: TextStyle(color: Colors.grey)),
                 Spacer(),
                 TextButton(
                   onPressed: () {
                     // Action for "Balas" button
                   },
-                  child: Text(
-                    'Balas',
-                    style: TextStyle(color: Color.fromRGBO(38, 66, 22, 10)),
-                  ),
+                  child: Text('Balas', style: TextStyle(color: Color.fromRGBO(38, 66, 22, 10))),
                 ),
               ],
             ),
-
           ],
         ),
       ),
