@@ -3,17 +3,15 @@ import 'package:flutter/material.dart';
 class Register extends StatefulWidget {
   const Register({super.key});
 
-    static const routeName = '/register';
+  static const routeName = '/register';
 
   @override
   State<Register> createState() => _RegisterState();
 }
 
-
 class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
-  
     return Scaffold(
       body: Center(
         child: SafeArea(child: 
@@ -189,7 +187,6 @@ class _RegisterState extends State<Register> {
         ),
         ),
       ),
-
     );
   }
 }

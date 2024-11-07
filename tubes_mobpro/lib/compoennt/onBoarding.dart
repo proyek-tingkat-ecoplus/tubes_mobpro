@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:tubes_webpro/compoennt/SplashScreen.dart';
-import 'package:tubes_webpro/pages/dashboard.dart';
 import 'package:tubes_webpro/pages/login.dart';
 
 class OnboardingScreen extends StatefulWidget {
