@@ -19,26 +19,51 @@ class _PemetaaanMapState extends State<PemetaaanMap> {
   @override
   void initState() {
     super.initState();
-    _markers = [
-      Marker(
-        markerId: const MarkerId('marker_1'),
-        position: const LatLng(-6.914744, 107.609810),
-        infoWindow: const InfoWindow(title: 'Bandung', snippet: 'Kota Kembang'),
-        onTap: () {
-          _showMarkerDialog(context, 'marker_1');
-        },
-      ),
+
+    // List of 10 coordinates around Bandung
+    List<LatLng> markerPositions = [
+      LatLng(-6.914744, 107.609810),
+      LatLng(-6.917464, 107.619123),
+      LatLng(-6.920132, 107.606789),
+      LatLng(-6.910532, 107.605645),
+      LatLng(-6.912543, 107.616790),
+      LatLng(-6.918675, 107.602456),
+      LatLng(-6.916789, 107.610234),
+      LatLng(-6.911234, 107.614678),
+      LatLng(-6.915678, 107.608456),
+      LatLng(-6.909876, 107.612345),
     ];
-    // Initialize marker data
-    markerInfo['marker_1'] = MarkerData(
-      namaEnergi: 'Energi Terbarukan 1',
-      namaPenanggungJawab: 'John Doe',
-      tanggalBinswas: '2023-12-20',
-      areaCabang: 'Area 1',
-      kapasitas: '1000 kW',
-      tahunOperasi: '2020',
-      langLong: '-6.914744, 107.609810',
-    );
+
+    // Create 10 markers with information
+    for (int i = 0; i < markerPositions.length; i++) {
+      String markerId = 'marker_$i';
+      LatLng position = markerPositions[i];
+
+      _markers.add(
+        Marker(
+          markerId: MarkerId(markerId),
+          position: position,
+          infoWindow: InfoWindow(
+            title: 'Marker $i',
+            snippet: 'Location in Bandung',
+          ),
+          onTap: () {
+            _showMarkerDialog(context, markerId);
+          },
+        ),
+      );
+
+      // Add marker data to markerInfo map
+      markerInfo[markerId] = MarkerData(
+        namaEnergi: 'Energi Terbarukan $i',
+        namaPenanggungJawab: 'Penanggung Jawab $i',
+        tanggalBinswas: '2023-12-${20 + i}',
+        areaCabang: 'Area ${i + 1}',
+        kapasitas: '${1000 + i * 100} kW',
+        tahunOperasi: '202${i % 3}',
+        langLong: '${position.latitude}, ${position.longitude}',
+      );
+    }
   }
 
   Future<List<Placemark>> getPlaceMarkByCoordinates(LatLng position) async {
@@ -84,18 +109,19 @@ class _PemetaaanMapState extends State<PemetaaanMap> {
                 return null;
               else
                 try {
-                  return await locationFromAddress(
-                      pattern); // ini https://pub.dev/packages/geocoding
+                  return await locationFromAddress(pattern); // ini https://pub.dev/packages/geocoding // ini buat nyari location
                 } catch (e) {
                   return null;
                 }
             },
-            itemBuilder: (context, Location suggestion) { // widget fluutter for asign operation
+            itemBuilder: (context, Location suggestion) {
+              // widget fluutter for asign operation
               return FutureBuilder<List<Placemark>>(
                 future: getPlaceMarkByCoordinates(
                   LatLng(suggestion.latitude, suggestion.longitude),
                 ),
-                builder: (context, snapshot) { // ini bawaan dari fliyyer buat menyimpan status
+                builder: (context, snapshot) {
+                  // ini bawaan dari fliyyer buat menyimpan status
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const ListTile(title: Text('Loading...'));
                   } else if (snapshot.hasError ||
@@ -105,7 +131,8 @@ class _PemetaaanMapState extends State<PemetaaanMap> {
                   } else {
                     // Loop through the list of placemarks
                     return Column(
-                      children: snapshot.data!.map((placemark) { // ini ng loop isi dari snapshot
+                      children: snapshot.data!.map((placemark) {
+                        // ini ng loop isi dari snapshot
                         return ListTile(
                           title: Text(placemark.name ?? 'No name'),
                           subtitle: Text(
@@ -114,8 +141,7 @@ class _PemetaaanMapState extends State<PemetaaanMap> {
                                   placemark.thoroughfare,
                                   placemark.subLocality,
                                   placemark.postalCode,
-                                ]
-                                    .join(", ") ??
+                                ].join(", ") ??
                                 'No address available',
                           ),
                         );
@@ -155,8 +181,10 @@ class _PemetaaanMapState extends State<PemetaaanMap> {
         },
         child: const Icon(Icons.location_searching),
       ),
-      body: GoogleMap( // ini core google map nya
-        initialCameraPosition: const CameraPosition( // default camera posision
+      body: GoogleMap(
+        // ini core google map nya
+        initialCameraPosition: const CameraPosition(
+          // default camera posision
           target: LatLng(-6.914744, 107.609810),
           zoom: 15,
         ),
@@ -164,8 +192,8 @@ class _PemetaaanMapState extends State<PemetaaanMap> {
           _mapController = controller;
         },
         onTap: (LatLng position) {
-          final MarkerId markerId = MarkerId(position.toString());
-          _inputModelDialog(context, markerId, position);
+          // final MarkerId markerId = MarkerId(position.toString());
+          // _inputModelDialog(context, markerId, position);
         },
         markers: _markers.toSet(),
       ),
@@ -382,235 +410,235 @@ class _PemetaaanMapState extends State<PemetaaanMap> {
     );
   }
 
-  void _inputModelDialog(
-      BuildContext context, MarkerId MarkerId, LatLng position) {
-    final inputNamaEnergi = TextEditingController(); // ini buat inputan harus ada
-    final inputNamaPj = TextEditingController();
-    final inputTanggalBinswas = TextEditingController();
-    final inputAreaCabang = TextEditingController();
-    final inputKapasitas = TextEditingController();
-    final inputTahunOperasi = TextEditingController();
-    final inputLatLong = TextEditingController();
+  // void _inputModelDialog(
+  //     BuildContext context, MarkerId MarkerId, LatLng position) {
+  //   final inputNamaEnergi = TextEditingController(); // ini buat inputan harus ada
+  //   final inputNamaPj = TextEditingController();
+  //   final inputTanggalBinswas = TextEditingController();
+  //   final inputAreaCabang = TextEditingController();
+  //   final inputKapasitas = TextEditingController();
+  //   final inputTahunOperasi = TextEditingController();
+  //   final inputLatLong = TextEditingController();
 
-    showModalBottomSheet<void>( // ini buat model botton input
-      context: context,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return Container(
-          width: double.infinity,
-          height: MediaQuery.of(context).size.height *
-              0.75, // 75% of the screen height
-          padding: const EdgeInsets.all(15),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              // mainAxisSize: MainAxisSize.min,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Text(
-                    'Data Eksisting EBT Jawa Barat',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromRGBO(38, 66, 22, 10)),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Nama Enegeri terbarukan : ",
-                        style: TextStyle(
-                            color: Color.fromRGBO(38, 66, 22, 10),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16),
-                      ),
-                      const SizedBox(height: 10),
-                      InputWidget(
-                          label: "",
-                          controller: inputNamaEnergi,
-                          icon: Icons.energy_savings_leaf),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Nama Penganggung jawab : ",
-                        style: TextStyle(
-                            color: Color.fromRGBO(38, 66, 22, 10),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16),
-                      ),
-                      const SizedBox(height: 10),
-                      InputWidget(
-                          label: "",
-                          controller: inputNamaPj,
-                          icon: Icons.person),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Tanggal Binswas : ",
-                        style: TextStyle(
-                            color: Color.fromRGBO(38, 66, 22, 10),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16),
-                      ),
-                      const SizedBox(height: 10),
-                      InputWidget(
-                          label: "",
-                          controller: inputTanggalBinswas,
-                          icon: Icons.calendar_today),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Area Cabang Dinas ESDM : ",
-                        style: TextStyle(
-                            color: Color.fromRGBO(38, 66, 22, 10),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16),
-                      ),
-                      const SizedBox(height: 10),
-                      InputWidget(
-                          label: "",
-                          controller: inputAreaCabang,
-                          icon: Icons.location_city),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Kapasitas (kW/KwP/M3) : ",
-                        style: TextStyle(
-                            color: Color.fromRGBO(38, 66, 22, 10),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16),
-                      ),
-                      const SizedBox(height: 10),
-                      InputWidget(
-                          label: "",
-                          controller: inputKapasitas,
-                          icon: Icons.speed),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Tahun Operasi : ",
-                        style: TextStyle(
-                            color: Color.fromRGBO(38, 66, 22, 10),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16),
-                      ),
-                      const SizedBox(height: 10),
-                      InputWidget(
-                          label: "",
-                          controller: inputTahunOperasi,
-                          icon: Icons.calendar_today),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Lang Long : ",
-                        style: TextStyle(
-                            color: Color.fromRGBO(38, 66, 22, 10),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16),
-                      ),
-                      const SizedBox(height: 10),
-                      InputWidget(
-                          label: "",
-                          controller: inputLatLong,
-                          icon: Icons.location_on),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 10),
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      _markers.add(
-                        Marker(
-                          markerId: MarkerId,
-                          position: position,
-                          infoWindow: const InfoWindow(
-                            title: 'Energi Terbarukan',
-                            snippet: 'Added by onTap',
-                          ),
-                          onTap: () {
-                            _showMarkerDialog(context, position.toString());
-                          },
-                        ),
-                      );
+  //   showModalBottomSheet<void>( // ini buat model botton input
+  //     context: context,
+  //     isScrollControlled: true,
+  //     builder: (BuildContext context) {
+  //       return Container(
+  //         width: double.infinity,
+  //         height: MediaQuery.of(context).size.height *
+  //             0.75, // 75% of the screen height
+  //         padding: const EdgeInsets.all(15),
+  //         child: SingleChildScrollView(
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.center,
+  //             // mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               const Padding(
+  //                 padding: EdgeInsets.all(20),
+  //                 child: Text(
+  //                   'Data Eksisting EBT Jawa Barat',
+  //                   style: TextStyle(
+  //                       fontSize: 18,
+  //                       fontWeight: FontWeight.bold,
+  //                       color: Color.fromRGBO(38, 66, 22, 10)),
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 10),
+  //               Padding(
+  //                 padding: const EdgeInsets.only(left: 20, right: 20),
+  //                 child: Column(
+  //                   crossAxisAlignment: CrossAxisAlignment.start,
+  //                   children: [
+  //                     const Text(
+  //                       "Nama Enegeri terbarukan : ",
+  //                       style: TextStyle(
+  //                           color: Color.fromRGBO(38, 66, 22, 10),
+  //                           fontWeight: FontWeight.bold,
+  //                           fontSize: 16),
+  //                     ),
+  //                     const SizedBox(height: 10),
+  //                     InputWidget(
+  //                         label: "",
+  //                         controller: inputNamaEnergi,
+  //                         icon: Icons.energy_savings_leaf),
+  //                   ],
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 10),
+  //               Padding(
+  //                 padding: const EdgeInsets.only(left: 20, right: 20),
+  //                 child: Column(
+  //                   crossAxisAlignment: CrossAxisAlignment.start,
+  //                   children: [
+  //                     const Text(
+  //                       "Nama Penganggung jawab : ",
+  //                       style: TextStyle(
+  //                           color: Color.fromRGBO(38, 66, 22, 10),
+  //                           fontWeight: FontWeight.bold,
+  //                           fontSize: 16),
+  //                     ),
+  //                     const SizedBox(height: 10),
+  //                     InputWidget(
+  //                         label: "",
+  //                         controller: inputNamaPj,
+  //                         icon: Icons.person),
+  //                   ],
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 10),
+  //               Padding(
+  //                 padding: const EdgeInsets.only(left: 20, right: 20),
+  //                 child: Column(
+  //                   crossAxisAlignment: CrossAxisAlignment.start,
+  //                   children: [
+  //                     const Text(
+  //                       "Tanggal Binswas : ",
+  //                       style: TextStyle(
+  //                           color: Color.fromRGBO(38, 66, 22, 10),
+  //                           fontWeight: FontWeight.bold,
+  //                           fontSize: 16),
+  //                     ),
+  //                     const SizedBox(height: 10),
+  //                     InputWidget(
+  //                         label: "",
+  //                         controller: inputTanggalBinswas,
+  //                         icon: Icons.calendar_today),
+  //                   ],
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 10),
+  //               Padding(
+  //                 padding: const EdgeInsets.only(left: 20, right: 20),
+  //                 child: Column(
+  //                   crossAxisAlignment: CrossAxisAlignment.start,
+  //                   children: [
+  //                     const Text(
+  //                       "Area Cabang Dinas ESDM : ",
+  //                       style: TextStyle(
+  //                           color: Color.fromRGBO(38, 66, 22, 10),
+  //                           fontWeight: FontWeight.bold,
+  //                           fontSize: 16),
+  //                     ),
+  //                     const SizedBox(height: 10),
+  //                     InputWidget(
+  //                         label: "",
+  //                         controller: inputAreaCabang,
+  //                         icon: Icons.location_city),
+  //                   ],
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 10),
+  //               Padding(
+  //                 padding: const EdgeInsets.only(left: 20, right: 20),
+  //                 child: Column(
+  //                   crossAxisAlignment: CrossAxisAlignment.start,
+  //                   children: [
+  //                     const Text(
+  //                       "Kapasitas (kW/KwP/M3) : ",
+  //                       style: TextStyle(
+  //                           color: Color.fromRGBO(38, 66, 22, 10),
+  //                           fontWeight: FontWeight.bold,
+  //                           fontSize: 16),
+  //                     ),
+  //                     const SizedBox(height: 10),
+  //                     InputWidget(
+  //                         label: "",
+  //                         controller: inputKapasitas,
+  //                         icon: Icons.speed),
+  //                   ],
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 10),
+  //               Padding(
+  //                 padding: const EdgeInsets.only(left: 20, right: 20),
+  //                 child: Column(
+  //                   crossAxisAlignment: CrossAxisAlignment.start,
+  //                   children: [
+  //                     const Text(
+  //                       "Tahun Operasi : ",
+  //                       style: TextStyle(
+  //                           color: Color.fromRGBO(38, 66, 22, 10),
+  //                           fontWeight: FontWeight.bold,
+  //                           fontSize: 16),
+  //                     ),
+  //                     const SizedBox(height: 10),
+  //                     InputWidget(
+  //                         label: "",
+  //                         controller: inputTahunOperasi,
+  //                         icon: Icons.calendar_today),
+  //                   ],
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 10),
+  //               Padding(
+  //                 padding: const EdgeInsets.only(left: 20, right: 20),
+  //                 child: Column(
+  //                   crossAxisAlignment: CrossAxisAlignment.start,
+  //                   children: [
+  //                     const Text(
+  //                       "Lang Long : ",
+  //                       style: TextStyle(
+  //                           color: Color.fromRGBO(38, 66, 22, 10),
+  //                           fontWeight: FontWeight.bold,
+  //                           fontSize: 16),
+  //                     ),
+  //                     const SizedBox(height: 10),
+  //                     InputWidget(
+  //                         label: "",
+  //                         controller: inputLatLong,
+  //                         icon: Icons.location_on),
+  //                   ],
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 10),
+  //               TextButton(
+  //                 onPressed: () {
+  //                   setState(() {
+  //                     _markers.add(
+  //                       Marker(
+  //                         markerId: MarkerId,
+  //                         position: position,
+  //                         infoWindow: const InfoWindow(
+  //                           title: 'Energi Terbarukan',
+  //                           snippet: 'Added by onTap',
+  //                         ),
+  //                         onTap: () {
+  //                           _showMarkerDialog(context, position.toString());
+  //                         },
+  //                       ),
+  //                     );
 
-                      markerInfo[position.toString()] = MarkerData(  // ini masukin marker data ke dalam map
-                        namaEnergi: inputNamaEnergi.text,
-                        namaPenanggungJawab: inputNamaPj.text,
-                        tanggalBinswas: inputTahunOperasi.text,
-                        areaCabang: inputAreaCabang.text,
-                        kapasitas: inputKapasitas.text,
-                        tahunOperasi: inputTahunOperasi.text,
-                        langLong: position.toString(),
-                      );
-                    });
-                    Navigator.pop(context);
-                  },
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: const Color.fromRGBO(38, 66, 22, 10),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: Text("Simpan"),
-                )
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
+  //                     markerInfo[position.toString()] = MarkerData(  // ini masukin marker data ke dalam map
+  //                       namaEnergi: inputNamaEnergi.text,
+  //                       namaPenanggungJawab: inputNamaPj.text,
+  //                       tanggalBinswas: inputTahunOperasi.text,
+  //                       areaCabang: inputAreaCabang.text,
+  //                       kapasitas: inputKapasitas.text,
+  //                       tahunOperasi: inputTahunOperasi.text,
+  //                       langLong: position.toString(),
+  //                     );
+  //                   });
+  //                   Navigator.pop(context);
+  //                 },
+  //                 style: TextButton.styleFrom(
+  //                   foregroundColor: Colors.white,
+  //                   backgroundColor: const Color.fromRGBO(38, 66, 22, 10),
+  //                   padding: const EdgeInsets.symmetric(
+  //                       horizontal: 40, vertical: 10),
+  //                   shape: RoundedRectangleBorder(
+  //                     borderRadius: BorderRadius.circular(10),
+  //                   ),
+  //                 ),
+  //                 child: Text("Simpan"),
+  //               )
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 }
 
 class MarkerData {

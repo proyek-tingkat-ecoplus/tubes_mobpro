@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tubes_webpro/compoennt/SplashScreen.dart';
 import 'package:tubes_webpro/pages/dashboard.dart';
 import 'package:tubes_webpro/pages/register.dart';
 import 'package:tubes_webpro/compoennt/CostomTextButton.dart';
@@ -104,7 +105,9 @@ class _LoginState extends State<Login> {
                                 ),
                                 onPressed: () {
                                   if (_formKey.currentState!.validate()) { //  buat validasi form
-                                    Navigator.pushNamed(context, Dashboard.routeName);
+                                      Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(builder: (_) => const Splashscreen(Pages: Dashboard(),)),
+                                      );
                                   }
                                 },
                                 child: const Text('Masuk', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
