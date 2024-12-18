@@ -183,6 +183,7 @@ class _PemetaaanMapState extends State<PemetaaanMap> {
         child: const Icon(Icons.location_searching),
       ),
       body: GoogleMap(
+        mapType: MapType.normal,
         // ini core google map nya
         initialCameraPosition: const CameraPosition(
           // default camera posision
@@ -197,6 +198,9 @@ class _PemetaaanMapState extends State<PemetaaanMap> {
           // _inputModelDialog(context, markerId, position);
         },
         markers: _markers.toSet(),
+        myLocationEnabled: false,
+        compassEnabled: true,
+        tiltGesturesEnabled: false,
       ),
     );
   }
