@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tubes_webpro/pages/Forum.dart';
 import 'package:tubes_webpro/pages/Home.dart';
 import 'package:tubes_webpro/pages/PemetaaanMap.dart';
@@ -16,6 +17,10 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   late int _selectedIndex; // Declare without initialization
   late PageController _pageController; // Declare without initialization
+  Future<void> _showOnboarding() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('showOnboarding', false);
+  }
 
   final List<Color> _backgroundColors = [
     Colors.white, // Home color
@@ -29,6 +34,7 @@ class _DashboardState extends State<Dashboard> {
     super.initState();
     _selectedIndex = widget.selectedIndex; // Access the selectedIndex from the widget
     _pageController = PageController(initialPage: _selectedIndex); // Initialize PageController
+    _showOnboarding();
   }
 
   @override
@@ -53,7 +59,7 @@ class _DashboardState extends State<Dashboard> {
           child: PageView(
             controller: _pageController,
             physics: const NeverScrollableScrollPhysics(),
-            children: const [
+            children:  [
               Home(),
               PemetaaanMap(),
               ForumPage(),
