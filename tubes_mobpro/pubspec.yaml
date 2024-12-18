@@ -48,6 +48,7 @@ dependencies:
   flutter_typeahead: ^5.2.0 #ini buat list 
   smooth_page_indicator: ^1.1.0
   shared_preferences: ^2.3.2
+  http: ^1.2.2
 
 dev_dependencies:
   flutter_test:

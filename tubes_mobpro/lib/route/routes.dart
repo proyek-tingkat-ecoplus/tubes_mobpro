@@ -17,8 +17,8 @@ class Routes extends StatelessWidget {
     return MaterialApp(
       initialRoute: '/',
       routes: {
-        '/':(context) => showOnboarding ? const Splashscreen(Pages: OnboardingScreen() ,) : const Splashscreen(Pages: OnboardingScreen(),) ,
-        Home.routeName: (context) => const Home(),
+        '/':(context) => showOnboarding ? const Splashscreen(Pages: OnboardingScreen() ,) : const Splashscreen(Pages: Login(),) ,
+        Home.routeName: (context) =>  Home(),
         Page_1.routeName: (context) => const Page_1(),
         Login.routeName: (context) => const Login(),
         Register.routeName: (context) => const Register(),
