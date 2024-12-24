@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tubes_webpro/compoennt/SplashScreen.dart';
 import 'package:tubes_webpro/pages/PersetujuanPages.dart';
 import 'package:tubes_webpro/pages/PersonalDetailPages.dart';
 import 'dart:io';
-
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tubes_webpro/pages/help.dart';
+import 'package:tubes_webpro/pages/login.dart';
 import 'package:tubes_webpro/pages/profile_details.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -17,7 +21,63 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   int _selectedIndex = 0;
+  String _username = "Guest";
+  String _token = "";
 
+  Future<void> _loadUsername() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? userJson = prefs.getString('user');
+    final getToken = prefs.getString('access_token');
+    if (userJson != null) {
+    Map<String, dynamic> userMap = jsonDecode(userJson);
+    setState(() {
+        _username = userMap["username"];
+        _token = getToken.toString();
+    });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUsername();
+  }
+
+  Future<void> _logout() async {
+      const String url = "https://ecopulse.top/api/auth/logout";
+    try{
+    final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+          "Accept": "application/json",
+          "Authorization" : "Bearer $_token",
+        },
+        //body: jsonEncode(payload),
+      );
+
+      if(response.statusCode == 200){
+        final prefs = await SharedPreferences.getInstance();
+        prefs.remove('user');
+        prefs.remove('access_token');
+        prefs.remove('expires_at');
+        prefs.remove('refresh_token');
+
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const Splashscreen(Pages: Login(),)),
+        );
+      }else{
+        final Map<String, dynamic> errorData = jsonDecode(response.body);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(errorData['message'] ?? 'Login failed' + response.body)),
+        );
+      }
+    }catch(e){
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred: $e')),
+      );
+    }
+  }
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -52,6 +112,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
+                        _logout();
                       Navigator.of(context).pop(); // Close the dialog
                     },
                     style: ElevatedButton.styleFrom(
@@ -162,8 +223,8 @@ class _ProfilePageState extends State<ProfilePage> {
               const SizedBox(height: 20),
               const ImagePickerWidget(), // Added the ImagePickerWidget here
               const SizedBox(height: 20),
-              const Text(
-                'Asep Supriadi',
+              Text(
+                '${_username}',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 5),

@@ -28,10 +28,9 @@ class _HomeState extends State<Home> {
     if (userJson != null) {
     Map<String, dynamic> userMap = jsonDecode(userJson);
     setState(() {
-        _username = userMap['username'] ?? 'Guest';
+        _username = userMap['username'] ;
     });
     }
-  
   }
 
   @override
@@ -53,7 +52,7 @@ class _HomeState extends State<Home> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Selamat Pagi, ${_username.split(" ")[0]}.', // Dynamic username
+                  'Selamat Pagi, ${_username}.', // Dynamic username
                   style: const TextStyle(
                     color: Colors.black,
                     fontSize: 18,
