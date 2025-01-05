@@ -43,6 +43,7 @@ dependencies:
   latlong2: ^0.9.1
   flutter_map_cancellable_tile_provider: ^3.0.2
   google_maps_flutter: ^2.9.0 # ini integrasi dengan google map
+  geolocator: ^10.0.0
   flutter_dotenv: ^5.2.1 # ini buat env
   geocoding: ^3.0.0 #ini buat nyari coordinat 
   flutter_typeahead: ^5.2.0 #ini buat list 
