@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 
 class PemetaaanMap extends StatefulWidget {
   const PemetaaanMap({super.key});
@@ -9,63 +14,267 @@ class PemetaaanMap extends StatefulWidget {
   @override
   State<PemetaaanMap> createState() => _PemetaaanMapState();
 }
+// Models
+class PemetaanAlatResponse {
+  final List<PemetaanData> data;
+
+  PemetaanAlatResponse({required this.data});
+
+  factory PemetaanAlatResponse.fromJson(Map<String, dynamic> json) {
+    return PemetaanAlatResponse(
+      data: (json['data'] as List).map((item) => PemetaanData.fromJson(item)).toList(),
+    );
+  }
+}
+
+class PemetaanData {
+  final int id;
+  final String judulReport;
+  final String deskripsi;
+  final String binwas;
+  final String tahunOperasi;
+  final String latitude;
+  final String longitude;
+  final String address;
+  final String tanggal;
+  final Alat alat;
+  final User user;
+
+  PemetaanData({
+    required this.id,
+    required this.judulReport,
+    required this.deskripsi,
+    required this.binwas,
+    required this.tahunOperasi,
+    required this.latitude,
+    required this.longitude,
+    required this.address,
+    required this.tanggal,
+    required this.alat,
+    required this.user,
+  });
+
+  factory PemetaanData.fromJson(Map<String, dynamic> json) {
+    return PemetaanData(
+      id: json['id'],
+      judulReport: json['judul_report'],
+      deskripsi: json['deskripsi'],
+      binwas: json['binwas'] ?? '',
+      tahunOperasi: json['tahun_operasi'],
+      latitude: json['latitude'],
+      longitude: json['longitude'],
+      address: json['address'],
+      tanggal: json['tanggal'],
+      alat: Alat.fromJson(json['alat']),
+      user: User.fromJson(json['user']),
+    );
+  }
+}
+
+class Alat {
+  final int id;
+  final String kodeAlat;
+  final String namaAlat;
+  final String jenis;
+  final String kondisi;
+  final int jumlah;
+  final String deskripsBarang;
+
+  Alat({
+    required this.id,
+    required this.kodeAlat,
+    required this.namaAlat,
+    required this.jenis,
+    required this.kondisi,
+    required this.jumlah,
+    required this.deskripsBarang,
+  });
+
+  factory Alat.fromJson(Map<String, dynamic> json) {
+    return Alat(
+      id: json['id'],
+      kodeAlat: json['kode_alat'],
+      namaAlat: json['nama_alat'],
+      jenis: json['jenis'],
+      kondisi: json['kondisi'],
+      jumlah: json['jumlah'],
+      deskripsBarang: json['deskripsi_barang'],
+    );
+  }
+}
+
+class User {
+  final int id;
+  final String username;
+  final String email;
+
+  User({
+    required this.id,
+    required this.username,
+    required this.email,
+  });
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      id: json['id'],
+      username: json['username'],
+      email: json['email'],
+    );
+  }
+}
+
+class LocationResult {
+  final Location location;
+  final Placemark placemark;
+  final Map<String, String> formattedAddress;
+
+  LocationResult({
+    required this.location,
+    required this.placemark,
+    required this.formattedAddress,
+  });
+}
 
 class _PemetaaanMapState extends State<PemetaaanMap> {
   late GoogleMapController _mapController;
   Map<String, MarkerData> markerInfo = {};
   final List<Marker> _markers = [];
   final SearchControllers = TextEditingController();
+  bool _isLoading = false;
+  String? _error;
 
   @override
   void initState() {
     super.initState();
-
-    // List of 10 coordinates around Bandung
-    List<LatLng> markerPositions = [
-      LatLng(-6.914744, 107.609810),
-      LatLng(-6.917464, 107.619123),
-      LatLng(-6.920132, 107.606789),
-      LatLng(-6.910532, 107.605645),
-      LatLng(-6.912543, 107.616790),
-      LatLng(-6.918675, 107.602456),
-      LatLng(-6.916789, 107.610234),
-      LatLng(-6.911234, 107.614678),
-      LatLng(-6.915678, 107.608456),
-      LatLng(-6.909876, 107.612345),
-    ];
-
-    // Create 10 markers with information
-    for (int i = 0; i < markerPositions.length; i++) {
-      String markerId = 'marker_$i';
-      LatLng position = markerPositions[i];
-
-      _markers.add(
-        Marker(
-          markerId: MarkerId(markerId),
-          position: position,
-          infoWindow: InfoWindow(
-            title: 'Marker $i',
-            snippet: 'Location in Bandung',
-          ),
-          onTap: () {
-            _showMarkerDialog(context, markerId);
-          },
-        ),
-      );
-
-      // Add marker data to markerInfo map
-      markerInfo[markerId] = MarkerData(
-        namaEnergi: 'Energi Terbarukan $i',
-        namaPenanggungJawab: 'Penanggung Jawab $i',
-        tanggalBinswas: '2023-12-${20 + i}',
-        areaCabang: 'Area ${i + 1}',
-        kapasitas: '${1000 + i * 100} kW',
-        tahunOperasi: '202${i % 3}',
-        langLong: '${position.latitude}, ${position.longitude}',
-      );
-    }
+    _initializeApp();
   }
 
+  Future<void> _checkPermissionAndGetCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Check if location services are enabled
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
+      return Future.error('Location services are disabled.');
+    }
+
+    // Check for location permission
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied.');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately
+      return Future.error(
+        'Location permissions are permanently denied, we cannot request permissions.',
+      );
+    }
+
+    // Get the current location
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+
+    // Center the map to the user's current location
+    _mapController.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: LatLng(position.latitude, position.longitude),
+          zoom: 15,
+        ),
+      ),
+    );
+
+    // Add a marker for the current location
+    setState(() {
+      _markers.add(
+        Marker(
+          markerId: MarkerId('current_location'),
+          position: LatLng(position.latitude, position.longitude),
+          infoWindow: const InfoWindow(title: 'You are here'),
+        ),
+      );
+    });
+  }
+
+  Future<void> _initializeApp() async {
+    setState(() => _isLoading = true);
+    await Future.wait([
+      fetchMarkers(),
+      _checkPermissionAndGetCurrentLocation(),
+    ]);
+    setState(() => _isLoading = false);
+  }
+
+  Future<void> fetchMarkers() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('access_token');
+      if (token == null) {
+        setState(() => _error = 'No access token found');
+        return;
+      }
+
+      final response = await http.get(
+        Uri.parse('https://ecopulse.top/api/pemetaanalat'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = PemetaanAlatResponse.fromJson(jsonDecode(response.body));
+        
+        setState(() {
+          _markers.clear();
+          
+          for (var data in responseData.data) {
+            String markerId = 'marker_${data.id}';
+            LatLng position = LatLng(
+              double.parse(data.latitude),
+              double.parse(data.longitude),
+            );
+
+            _markers.add(
+              Marker(
+                markerId: MarkerId(markerId),
+                position: position,
+                infoWindow: InfoWindow(
+                  title: data.alat.namaAlat,
+                  snippet: data.address,
+                ),
+                onTap: () {
+                  _showMarkerDialog(context, markerId);
+                },
+              ),
+            );
+
+            markerInfo[markerId] = MarkerData(
+              namaEnergi: data.alat.namaAlat,
+              namaPenanggungJawab: data.user.username,
+              tanggalBinswas: data.binwas,
+              areaCabang: data.address,
+              kapasitas: "${data.alat.jumlah} ${data.alat.jenis}",
+              tahunOperasi: data.tahunOperasi,
+              langLong: '${data.latitude}, ${data.longitude}',
+            );
+          }
+          _error = null;
+        });
+      } else {
+        setState(() => _error = 'Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      setState(() => _error = 'Error: $e');
+    }
+  }
   Future<List<Placemark>> getPlaceMarkByCoordinates(LatLng position) async {
     final List<Placemark> placemarks = await placemarkFromCoordinates(
       position.latitude,
@@ -83,86 +292,169 @@ class _PemetaaanMapState extends State<PemetaaanMap> {
         backgroundColor: const Color.fromRGBO(38, 66, 22, 10),
         title: Padding(
           padding: const EdgeInsets.all(20),
-          child: TypeAheadField(
+          child: TypeAheadField<LocationResult>(
             builder: (context, controller, focusNode) {
-              return Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(60),
-                ),
-                child: TextField(
-                  controller: controller,
-                  focusNode: focusNode,
-                  obscureText: false,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
+              return TextField(
+                controller: controller,
+                focusNode: focusNode,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  hintText: 'Cari lokasi (cth: Wisma Darul Ilmi)',
+                  prefixIcon: const Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide.none,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: Theme.of(context).primaryColor,
+                      width: 2,
                     ),
-                    prefixIcon: const Icon(Icons.search),
                   ),
                 ),
               );
             },
             suggestionsCallback: (pattern) async {
-              // ini buat dapetin data yang ngebalikin location callback
-              if (pattern.isEmpty) {
-                return null;
-              } else {
-                try {
-                  return await locationFromAddress(pattern); // ini https://pub.dev/packages/geocoding // ini buat nyari location
-                } catch (e) {
-                  return null;
+              if (pattern.length < 3) return [];
+              try {
+                final searchQuery = '$pattern, Bandung';
+                List<Location> locations =
+                    await locationFromAddress(searchQuery);
+                List<LocationResult> results = [];
+
+                for (var location in locations) {
+                  try {
+                    List<Placemark> placemarks = await placemarkFromCoordinates(
+                      location.latitude,
+                      location.longitude,
+                    );
+
+                    if (placemarks.isNotEmpty) {
+                      Placemark place = placemarks.first;
+
+                      // Skip if not in Bandung area
+                      if (!(place.subAdministrativeArea
+                                  ?.toLowerCase()
+                                  .contains('bandung') ??
+                              false) &&
+                          !(place.locality?.toLowerCase().contains('bandung') ??
+                              false)) {
+                        continue;
+                      }
+
+                      List<String> mainParts = [];
+                      List<String> secondaryParts = [];
+
+                      // Build main address (building name or street)
+                      if (place.name != null && !place.name!.contains('+')) {
+                        mainParts.add(place.name!);
+                      }
+                      if (place.street != null && place.street!.isNotEmpty) {
+                        mainParts.add(place.street!);
+                      }
+
+                      // Build secondary address (area details)
+                      if (place.subLocality != null &&
+                          place.subLocality!.isNotEmpty) {
+                        secondaryParts.add(place.subLocality!);
+                      }
+                      if (place.locality != null &&
+                          place.locality!.isNotEmpty) {
+                        secondaryParts.add(place.locality!);
+                      }
+
+                      // Create formatted address
+                      Map<String, String> formattedAddress = {
+                        'main': mainParts.join(', '),
+                        'secondary': secondaryParts.join(', '),
+                      };
+
+                      results.add(LocationResult(
+                        location: location,
+                        placemark: place,
+                        formattedAddress: formattedAddress,
+                      ));
+                    }
+                  } catch (e) {
+                    print('Error getting placemark: $e');
+                  }
                 }
+
+                // Sort results to prioritize exact matches
+                results.sort((a, b) {
+                  bool aContainsBandung =
+                      a.placemark.locality?.toLowerCase().contains('bandung') ??
+                          false;
+                  bool bContainsBandung =
+                      b.placemark.locality?.toLowerCase().contains('bandung') ??
+                          false;
+                  if (aContainsBandung && !bContainsBandung) return -1;
+                  if (!aContainsBandung && bContainsBandung) return 1;
+                  return 0;
+                });
+
+                return results;
+              } catch (e) {
+                print('Error searching location: $e');
+                return [];
               }
             },
-            itemBuilder: (context, Location suggestion) {
-              // widget fluutter for asign operation
-              return FutureBuilder<List<Placemark>>(
-                future: getPlaceMarkByCoordinates(
-                  LatLng(suggestion.latitude, suggestion.longitude),
+            itemBuilder: (context, LocationResult suggestion) {
+              return ListTile(
+                leading: const Icon(
+                  Icons.location_on,
+                  color: Color.fromRGBO(38, 66, 22, 10),
                 ),
-                builder: (context, snapshot) {
-                  // ini bawaan dari fliyyer buat menyimpan status
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const ListTile(title: Text('Loading...'));
-                  } else if (snapshot.hasError ||
-                      !snapshot.hasData ||
-                      snapshot.data!.isEmpty) {
-                    return const ListTile(title: Text('No data'));
-                  } else {
-                    // Loop through the list of placemarks
-                    return Column(
-                      children: snapshot.data!.map((placemark) {
-                        // ini ng loop isi dari snapshot
-                        return ListTile(
-                          title: Text(placemark.name ?? 'No name'),
-                          subtitle: Text(
-                            [
-                                  placemark.subAdministrativeArea,
-                                  placemark.thoroughfare,
-                                  placemark.subLocality,
-                                  placemark.postalCode,
-                                ].join(", ") ??
-                                'No address available',
-                          ),
-                        );
-                      }).toList(),
-                    );
-                  }
-                },
+                title: Text(
+                  suggestion.formattedAddress['main'] ?? '',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                  ),
+                ),
+                subtitle: Text(
+                  suggestion.formattedAddress['secondary'] ?? '',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.black54,
+                  ),
+                ),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
               );
             },
-            onSelected: (Location suggestion) {
-              // ini jika di select maka redirect ke lokasi tersebut
+            onSelected: (LocationResult suggestion) {
               _mapController.animateCamera(
                 CameraUpdate.newCameraPosition(
                   CameraPosition(
-                    target: LatLng(suggestion.latitude, suggestion.longitude),
-                    zoom: 15,
+                    target: LatLng(
+                      suggestion.location.latitude,
+                      suggestion.location.longitude,
+                    ),
+                    zoom: 18,
                   ),
                 ),
               );
             },
+            loadingBuilder: (context) => const ListTile(
+              leading: CircularProgressIndicator(strokeWidth: 2),
+              title: Text('Mencari lokasi...'),
+            ),
+            errorBuilder: (context, error) => ListTile(
+              leading: const Icon(Icons.error, color: Colors.red),
+              title: Text('Error: ${error.toString()}'),
+            ),
+            hideOnEmpty: true,
+            hideOnError: true,
+            animationDuration: const Duration(milliseconds: 300),
           ),
         ),
       ),
@@ -198,7 +490,7 @@ class _PemetaaanMapState extends State<PemetaaanMap> {
           // _inputModelDialog(context, markerId, position);
         },
         markers: _markers.toSet(),
-        myLocationEnabled: false,
+        myLocationEnabled: true,
         compassEnabled: true,
         tiltGesturesEnabled: false,
       ),
