@@ -354,7 +354,9 @@ class _LoginState extends State<Login> {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  Navigator.pushNamed(context, Register.routeName);
+                                  Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(builder: (_) => const Splashscreen(Pages: Register(),)),
+                                    );
                                 },
                                 child: const Text(
                                   "Buat Akun",
