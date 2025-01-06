@@ -21,8 +21,8 @@ class Routes extends StatelessWidget {
         Home.routeName: (context) =>  Home(),
         Page_1.routeName: (context) => const Page_1(),
         Login.routeName: (context) => const Login(),
-        Register.routeName: (context) => const Register(),
-        Dashboard.routeName: (context) =>  const Dashboard(),
+        Register.routeName: (context) =>  Register(),
+        Dashboard.routeName: (context) =>  Dashboard(),
       
         Personaldetailpages.routeName: (context) => const Personaldetailpages(),
           ProfilePage.routeName: (context) => const ProfilePage(),
