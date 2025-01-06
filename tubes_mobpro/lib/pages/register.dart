@@ -282,8 +282,21 @@ class _RegisterState extends State<Register> {
                             ),
                           ),
                     ),
-                    // Rest of your UI remains the same
-                    // ...
+                    const SizedBox(height: 12,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          "Sudah Punya Akun?",
+                          style: TextStyle(color: Color.fromRGBO(38, 66, 22, 10)),
+                        ),
+                        TextButton(onPressed: (){
+                          Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(builder: (_) => const Splashscreen(Pages: Login(),)),
+                          );
+                        }, child: const Text("Masuk di sini", style: TextStyle(decoration: TextDecoration.underline, color: Color.fromRGBO(38, 66, 22, 10), fontWeight: FontWeight.bold),)),
+                      ],
+                    ),
                   ],
                 ),
               ),
