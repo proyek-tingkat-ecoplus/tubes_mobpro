@@ -6,6 +6,9 @@ import 'package:tubes_mobpro/compoennt/CostomTextButton.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:local_auth/local_auth.dart';
+import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -17,19 +20,29 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  // ini buat validasi fprm
   final _formKey = GlobalKey<FormState>();
+  // ini buat controller form input
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  // state varibles
   bool isChecked = false;
   bool _isObscured = true;
   bool _isLoading = false;
   String? _emailError;
   String? _passwordError;
 
+  final LocalAuthentication _localAuth = LocalAuthentication();
+  bool _canCheckBiometric = false;
+  String _authorizedOrNot = "Not Authorized";
+  List<BiometricType> _availableBiometrics = [];
+
   @override
   void initState() {
     super.initState();
     _checkIfLogin();
+    _checkBiometric();
+    _getAvailableBiometrics();
   }
 
   @override
@@ -44,55 +57,91 @@ class _LoginState extends State<Login> {
     if (prefs.getString('access_token') != null) {
       if (mounted) {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const Splashscreen(Pages: Dashboard())),
+          MaterialPageRoute(
+              builder: (_) => const Splashscreen(Pages: Dashboard())),
         );
       }
     }
   }
 
+  // fungsi untuk cek biometric
+  Future<void> _checkBiometric() async {
+    try {
+      bool canCheckBiometric = await _localAuth.isDeviceSupported();
+      setState(() {
+        _canCheckBiometric = canCheckBiometric;
+      });
+    } catch (e) {
+      print("Error checking biometrics: $e");
+    }
+  }
+
+  // fungsi untuk mendapatkan biometric yang tersedia
+  Future<void> _getAvailableBiometrics() async {
+    try {
+      List<BiometricType> availableBiometrics =
+          await _localAuth.getAvailableBiometrics();
+      setState(() {
+        _availableBiometrics = availableBiometrics;
+      });
+      print("Biometrik yang tersedia: $_availableBiometrics");
+    } catch (e) {
+      print("Gagal mendapatkan biometrik: $e");
+    }
+  }
+
+  // fungsi untuk autentikasi dengan biometric jadi tinggal _authenticateWithBiometrics() aja kalau sudah ada nanti di arahkan ke login
+  Future<void> _authenticateWithBiometrics() async {
+    try {
+      bool authenticated = await _localAuth.authenticate(
+        localizedReason: 'Gunakan sidik jari untuk login',
+        options: const AuthenticationOptions(
+          stickyAuth: true,
+          biometricOnly: false, // jadi ga cuman biometric aja bisa
+        ),
+      );
+
+      if (authenticated) {
+        final prefs = await SharedPreferences.getInstance();
+        final storedEmail = prefs.getString('stored_email');
+        final storedPassword = prefs.getString('stored_password');
+
+        if (storedEmail != null && storedPassword != null) {
+          _usernameController.text = storedEmail;
+          _passwordController.text = storedPassword;
+          await _login();
+        } else {
+          setState(() {
+            _passwordError = 'Silakan login secara manual terlebih dahulu';
+          });
+        }
+      }
+    } on PlatformException catch (e) {
+      print(e.message);
+      setState(() {
+        _passwordError = 'Autentikasi gagal: ${e.message}';
+      });
+    }
+  }
+
   Future<void> _login() async {
-    // Reset errors
     setState(() {
       _emailError = null;
       _passwordError = null;
+      _isLoading = true;
     });
 
     String email = _usernameController.text.trim();
     String password = _passwordController.text;
 
-    bool hasError = false;
-
-    // Client-side validation
-    if (email.isEmpty) {
+    if (email.isEmpty || password.isEmpty) {
       setState(() {
-        _emailError = 'Email tidak boleh kosong';
+        _emailError = email.isEmpty ? 'Email tidak boleh kosong' : null;
+        _passwordError =
+            password.isEmpty ? 'Password tidak boleh kosong' : null;
       });
-      hasError = true;
-    } else {
-      final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-      if (!emailRegex.hasMatch(email)) {
-        setState(() {
-          _emailError = 'Format email tidak valid';
-        });
-        hasError = true;
-      }
+      return;
     }
-
-    if (password.isEmpty) {
-      setState(() {
-        _passwordError = 'Password tidak boleh kosong';
-      });
-      hasError = true;
-    } else if (password.length < 6) {
-      setState(() {
-        _passwordError = 'Password minimal 6 karakter';
-      });
-      hasError = true;
-    }
-
-    if (hasError) return;
-
-    setState(() => _isLoading = true);
 
     try {
       final response = await http.post(
@@ -101,15 +150,10 @@ class _LoginState extends State<Login> {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
-        body: jsonEncode({
-          'email': email,
-          'password': password,
-        }),
+        body: jsonEncode({'email': email, 'password': password}),
       );
 
       final responseData = jsonDecode(response.body);
-
-      if (!mounted) return;
 
       if (response.statusCode == 200) {
         final prefs = await SharedPreferences.getInstance();
@@ -117,40 +161,26 @@ class _LoginState extends State<Login> {
         await prefs.setString('token_type', responseData['token_type']);
         await prefs.setString('expires_at', responseData['expires_at']);
         await prefs.setString('user', jsonEncode(responseData['user']));
-
+        await prefs.setString('stored_email', email);
+        await prefs.setString('stored_password', password);
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const Splashscreen(Pages: Dashboard())),
+          MaterialPageRoute(
+              builder: (_) => const Splashscreen(Pages: Dashboard())),
         );
       } else {
-        if (response.statusCode == 422 && responseData['errors'] != null) {
-          Map<String, dynamic> errors = responseData['errors'];
-          setState(() {
-            if (errors['email'] != null) {
-              _emailError = errors['email'][0];
-            }
-            if (errors['password'] != null) {
-              _passwordError = errors['password'][0];
-            }
-          });
-        } else if (response.statusCode == 401) {
-          setState(() {
-            _passwordError = 'Email atau password salah';
-          });
-        } else {
-          setState(() {
-            _passwordError = responseData['message'] ?? 'Terjadi kesalahan saat login';
-          });
-        }
+        setState(() {
+          _passwordError = 'Login gagal. Periksa kembali email dan password.';
+        });
       }
     } catch (e) {
-      if (!mounted) return;
+      print(e);
       setState(() {
         _passwordError = 'Tidak dapat terhubung ke server';
       });
     } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -165,11 +195,19 @@ class _LoginState extends State<Login> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  "Selamat Datang",
+                  "Selamat Datang di Ecopulse",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 30,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Text(
+                  "Masuk untuk Melanjutkan",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
                 Card(
@@ -231,8 +269,11 @@ class _LoginState extends State<Login> {
                               prefixIcon: const Icon(Icons.lock),
                               errorText: _passwordError,
                               suffixIcon: IconButton(
-                                icon: Icon(_isObscured ? Icons.visibility : Icons.visibility_off),
-                                onPressed: () => setState(() => _isObscured = !_isObscured),
+                                icon: Icon(_isObscured
+                                    ? Icons.visibility
+                                    : Icons.visibility_off),
+                                onPressed: () =>
+                                    setState(() => _isObscured = !_isObscured),
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
@@ -290,7 +331,8 @@ class _LoginState extends State<Login> {
                             height: 45,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color.fromRGBO(38, 66, 22, 1),
+                                backgroundColor:
+                                    const Color.fromRGBO(38, 66, 22, 1),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
@@ -308,31 +350,35 @@ class _LoginState extends State<Login> {
                                   : const Text(
                                       'Masuk',
                                       style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white
-                                      ),
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
                                     ),
                             ),
                           ),
                           const SizedBox(height: 12),
                           const _OrDivider(),
                           const SizedBox(height: 12),
-                          _buildSocialLoginButton(
-                            text: 'Masuk dengan Google',
-                            icon: Icons.g_mobiledata_outlined,
-                            onPressed: () {},
-                            isGoogle: true,
-                          ),
-                          const SizedBox(height: 8),
-                          _buildSocialLoginButton(
-                            text: 'Masuk dengan Facebook',
-                            icon: Icons.facebook,
-                            onPressed: () {},
-                            isGoogle: false,
-                          ),
+                          if (_canCheckBiometric &&
+                              _availableBiometrics.isNotEmpty)
+                            _costomButton(
+                              text: 'Masuk dengan Biometric',
+                              backgroundColor:
+                                  const Color.fromRGBO(38, 66, 22, 1),
+                              foregroundColor: Colors.white,
+                              onPressed: _authenticateWithBiometrics,
+                              icon: Icons.fingerprint,
+                            ),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              const url = 'https://ecopulse.top/forgetPassword';
+                              final Uri uri = Uri.parse(url);
+
+                              if (!await launchUrl(uri,
+                                  mode: LaunchMode.externalApplication)) {
+                                print('Gagal membuka URL');
+                              }
+                            },
                             child: const Text(
                               "Lupa password?",
                               style: TextStyle(
@@ -355,8 +401,11 @@ class _LoginState extends State<Login> {
                               TextButton(
                                 onPressed: () {
                                   Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(builder: (_) => const Splashscreen(Pages: Register(),)),
-                                    );
+                                    MaterialPageRoute(
+                                        builder: (_) => const Splashscreen(
+                                              Pages: Register(),
+                                            )),
+                                  );
                                 },
                                 child: const Text(
                                   "Buat Akun",
@@ -382,31 +431,33 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Widget _buildSocialLoginButton({
+  Widget _costomButton({
     required String text,
-    required IconData icon,
+    required Color backgroundColor,
+    required Color foregroundColor,
     required VoidCallback onPressed,
-    required bool isGoogle,
+    IconData? icon,
   }) {
     return SizedBox(
       width: double.infinity,
       child: TextButton(
         style: TextButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 12),
-          backgroundColor: isGoogle ? Colors.white : const Color.fromRGBO(24, 119, 242, 1),
-          foregroundColor: isGoogle ? const Color.fromRGBO(24, 119, 242, 1) : Colors.white,
+          backgroundColor: backgroundColor,
+          foregroundColor: foregroundColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
-            side: isGoogle
-                ? const BorderSide(color: Color.fromRGBO(24, 119, 242, 1))
-                : BorderSide.none,
           ),
         ),
         onPressed: onPressed,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon),
+            if (icon != null)
+              Icon(
+                icon,
+                color: Colors.white,
+              ),
             const SizedBox(width: 8),
             Text(
               text,
