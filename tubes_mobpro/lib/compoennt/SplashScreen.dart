@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:tubes_webpro/pages/login.dart';
+import 'package:tubes_mobpro/pages/login.dart';
 
 class Splashscreen extends StatefulWidget {
   const Splashscreen({super.key, required this.Pages});

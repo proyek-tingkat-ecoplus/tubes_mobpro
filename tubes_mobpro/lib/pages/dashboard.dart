@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tubes_webpro/pages/Forum.dart';
-import 'package:tubes_webpro/pages/Home.dart';
-import 'package:tubes_webpro/pages/PemetaaanMap.dart';
-import 'package:tubes_webpro/pages/portfile.dart';
+import 'package:tubes_mobpro/pages/Forum.dart';
+import 'package:tubes_mobpro/pages/Home.dart';
+import 'package:tubes_mobpro/pages/PemetaaanMap.dart';
+import 'package:tubes_mobpro/pages/portfile.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key, this.selectedIndex = 0});

@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "tubes_webpro" "\0"
+            VALUE "FileDescription", "tubes_mobpro" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "tubes_webpro" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "tubes_webpro.exe" "\0"
-            VALUE "ProductName", "tubes_webpro" "\0"
+            VALUE "InternalName", "tubes_mobpro" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2025 com.example. All rights reserved." "\0"
+            VALUE "OriginalFilename", "tubes_mobpro.exe" "\0"
+            VALUE "ProductName", "tubes_mobpro" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

@@ -1,6 +1,6 @@
 {
-    "name": "tubes_webpro",
-    "short_name": "tubes_webpro",
+    "name": "tubes_mobpro",
+    "short_name": "tubes_mobpro",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tubes_webpro/compoennt/SplashScreen.dart';
-import 'package:tubes_webpro/pages/PersetujuanPages.dart';
-import 'package:tubes_webpro/pages/PersonalDetailPages.dart';
+import 'package:tubes_mobpro/compoennt/SplashScreen.dart';
+import 'package:tubes_mobpro/pages/PersetujuanPages.dart';
+import 'package:tubes_mobpro/pages/PersonalDetailPages.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tubes_webpro/pages/help.dart';
-import 'package:tubes_webpro/pages/login.dart';
-import 'package:tubes_webpro/pages/profile_details.dart';
+import 'package:tubes_mobpro/pages/help.dart';
+import 'package:tubes_mobpro/pages/login.dart';
+import 'package:tubes_mobpro/pages/profile_details.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});

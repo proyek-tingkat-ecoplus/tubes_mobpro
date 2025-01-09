@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:tubes_webpro/compoennt/SplashScreen.dart';
-import 'package:tubes_webpro/compoennt/onBoarding.dart';
-import 'package:tubes_webpro/pages/Home.dart';
-import 'package:tubes_webpro/pages/PersonalDetailPages.dart';
-import 'package:tubes_webpro/pages/login.dart';
-import 'package:tubes_webpro/pages/page_1.dart';
-import 'package:tubes_webpro/pages/portfile.dart';
-import 'package:tubes_webpro/pages/register.dart';
-import 'package:tubes_webpro/pages/dashboard.dart';
+import 'package:tubes_mobpro/compoennt/SplashScreen.dart';
+import 'package:tubes_mobpro/compoennt/onBoarding.dart';
+import 'package:tubes_mobpro/pages/Home.dart';
+import 'package:tubes_mobpro/pages/PersonalDetailPages.dart';
+import 'package:tubes_mobpro/pages/login.dart';
+import 'package:tubes_mobpro/pages/page_1.dart';
+import 'package:tubes_mobpro/pages/portfile.dart';
+import 'package:tubes_mobpro/pages/register.dart';
+import 'package:tubes_mobpro/pages/dashboard.dart';
 
 class Routes extends StatelessWidget {
   const Routes({super.key, required this.showOnboarding});

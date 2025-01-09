@@ -6,13 +6,18 @@ plugins {
 }
 
 android {
-    namespace = "com.example.tubes_webpro"
+    namespace = "com.example.tubes_mobpro"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
-
+    compileSdk 34
+    defaultConfig {
+    multiDexEnabled true
+    }
+    
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true
     }
 
     kotlinOptions {
@@ -21,13 +26,15 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.tubes_webpro"
+        applicationId = "com.example.tubes_mobpro"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = 21
+        minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        multiDexEnabled = true // Aktifkan MultiDex
+        
     }
 
     buildTypes {
@@ -37,11 +44,14 @@ android {
             signingConfig = signingConfigs.debug
         }
     }
-    defaultConfig {
-        resValue "string", "MASS_API_KEY", (project.findProperty("MASS_API_KEY") ?: "")
-    }
 }
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    implementation 'androidx.core:core:1.9.0'
+    implementation 'com.android.support:multidex:1.0.3'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
 }
