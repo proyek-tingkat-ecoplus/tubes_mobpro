@@ -1,8 +1,16 @@
 import 'dart:convert';
+import 'dashboard.dart';
+import 'dart:typed_data';
+import 'package:flutter/services.dart';
 
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:tubes_mobpro/pages/Forum.dart';
+import 'package:tubes_mobpro/pages/PemetaaanMap.dart';
+import 'package:tubes_mobpro/pages/portfile.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class Home extends StatefulWidget {
   Home({super.key});
@@ -12,6 +20,9 @@ class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 class _HomeState extends State<Home> {
   String _username = "Guest"; // Default username placeholder
@@ -26,11 +37,42 @@ class _HomeState extends State<Home> {
     final prefs = await SharedPreferences.getInstance();
     String? userJson = prefs.getString('user');
     if (userJson != null) {
-    Map<String, dynamic> userMap = jsonDecode(userJson);
-    setState(() {
-        _username = userMap['username'] ;
-    });
+      Map<String, dynamic> userMap = jsonDecode(userJson);
+      setState(() {
+        _username = userMap['username'];
+      });
     }
+  }
+
+  Future<void> _showNotification(String title, String body) async {
+  final ByteData bytes = await rootBundle.load('assets/notification_bell.png');
+  final Uint8List list = bytes.buffer.asUint8List();
+
+  final BigPictureStyleInformation bigPictureStyle = await BigPictureStyleInformation(
+    ByteArrayAndroidBitmap(list),
+    largeIcon: ByteArrayAndroidBitmap(list),
+    hideExpandedLargeIcon: true,
+  );
+
+    final AndroidNotificationDetails androidPlatformChannelSpecifics =
+      AndroidNotificationDetails(
+      'default_channel_id',
+      'Default Channel',
+      channelDescription: 'Default notifications channel',
+      importance: Importance.max,
+      priority: Priority.high,
+      styleInformation: bigPictureStyle,
+    );
+
+    final NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      title,
+      body,
+      platformChannelSpecifics,
+    );
   }
 
   @override
@@ -75,40 +117,24 @@ class _HomeState extends State<Home> {
             icon: const Icon(Icons.notifications_active_rounded),
             tooltip: 'Notifikasi',
             onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text('Notifikasi'),
-                  content: Container(
-                    height: 300,
-                    child: ListView(
-                      children: [
-                        _buildNotificationItem(
-                          'Selamat! Proposal anda diterima',
-                        ),
-                        const SizedBox(height: 5),
-                        _buildNotificationItem(
-                          'Update terbaru tersedia',
-                        ),
-                      ],
-                    ),
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('Tutup'),
-                    ),
-                  ],
-                ),
-              );
+              _showNotification(
+                  'Judul Notifikasi', 'Ini adalah isi notifikasi');
             },
           ),
           const SizedBox(width: 16),
-          const CircleAvatar(
-            backgroundImage: NetworkImage(
-              'https://example.com/profile.jpg', // Profile image URL
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const Dashboard(selectedIndex: 3),
+                ),
+              );
+            },
+            child: const CircleAvatar(
+              backgroundImage: NetworkImage(
+                'https://i.imgur.com/pu4BpSa.png', // URL foto profil
+              ),
             ),
           ),
           const SizedBox(width: 16),
@@ -120,24 +146,50 @@ class _HomeState extends State<Home> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Search bar
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Pencarian',
-                  prefixIcon: const Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide.none,
-                  ),
-                  filled: true,
-                  fillColor: Colors.grey[200],
-                ),
-              ),
-              const SizedBox(height: 16),
-
               // Image banner
-              Center(
-                child: Image.asset('assets/banner.jpeg'),
+              CarouselSlider(
+                items: [
+                  Container(
+                    margin: EdgeInsets.all(6.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.0),
+                      image: DecorationImage(
+                        image: NetworkImage("https://i.imgur.com/ZbokiCB.jpeg"),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.all(6.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.0),
+                      image: DecorationImage(
+                        image: NetworkImage("https://i.imgur.com/ZbokiCB.jpeg"),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.all(6.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.0),
+                      image: DecorationImage(
+                        image: NetworkImage("https://i.imgur.com/ZbokiCB.jpeg"),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ],
+                options: CarouselOptions(
+                  height: 180.0,
+                  enlargeCenterPage: true,
+                  autoPlay: true,
+                  aspectRatio: 16 / 9,
+                  autoPlayCurve: Curves.fastOutSlowIn,
+                  enableInfiniteScroll: true,
+                  autoPlayAnimationDuration: Duration(milliseconds: 800),
+                  viewportFraction: 0.8,
+                ),
               ),
               const SizedBox(height: 16),
 
@@ -147,77 +199,52 @@ class _HomeState extends State<Home> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-              GridView.count(
-                crossAxisCount: 4,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
-                children: [
-                  _buildMenuButton(
-                    icon: Icons.person_outline,
-                    label: 'Role\nManagement',
-                    onPressed: () {
-                      print('Role Management clicked');
-                    },
+              Align(
+                alignment: Alignment.center, // Memastikan berada di tengah
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    maxWidth: 250, // Atur lebar maksimum grid menu
                   ),
-                  _buildMenuButton(
-                    icon: Icons.chat_bubble_outline,
-                    label: 'Forum\nManagement',
-                    onPressed: () {
-                      print('Forum Management clicked');
-                    },
+                  child: GridView.count(
+                    crossAxisCount: 2, // Sesuaikan jumlah kolom dengan isi
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    mainAxisSpacing: 16,
+                    crossAxisSpacing: 16,
+                    children: [
+                      _buildMenuButton(
+                        icon: Icons.chat_bubble_outline,
+                        label: 'Forum\nManagement',
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const Dashboard(
+                                  selectedIndex:
+                                      2), // Ganti dengan halaman yang sesuai
+                            ),
+                          );
+                        },
+                      ),
+                      _buildMenuButton(
+                        icon: Icons.map_outlined,
+                        label: 'Pemetaan\nInfrastruktur',
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const Dashboard(
+                                  selectedIndex:
+                                      4), // Ganti dengan halaman yang sesuai
+                            ),
+                          );
+                        },
+                      ),
+                    ],
                   ),
-                  _buildMenuButton(
-                    icon: Icons.description_outlined,
-                    label: 'Peninjauan\nProposal',
-                    onPressed: () {
-                      print('Peninjauan Proposal clicked');
-                    },
-                  ),
-                  _buildMenuButton(
-                    icon: Icons.map_outlined,
-                    label: 'Pemetaan\nInfrastruktur',
-                    onPressed: () {
-                      print('Pemetaan Infrastruktur clicked');
-                    },
-                  ),
-                ],
+                ),
               ),
-              const SizedBox(height: 16),
 
-              // Pending Proposal
-              const Text(
-                'Pending Proposal',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.green[50],
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.green),
-                ),
-                child: const Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        'Pending Proposal',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    Text(
-                      '20',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
               const SizedBox(height: 16),
 
               // Calendar
@@ -276,9 +303,10 @@ class _HomeState extends State<Home> {
     required VoidCallback onPressed,
   }) {
     return OutlinedButton(
-      onPressed: onPressed,
+      onPressed: onPressed, // Navigasi akan diatur di sini
       style: OutlinedButton.styleFrom(
-        side: const BorderSide(color: Color.fromRGBO(38, 66, 22, 10), width: 1.5),
+        side:
+            const BorderSide(color: Color.fromRGBO(38, 66, 22, 10), width: 1.5),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
