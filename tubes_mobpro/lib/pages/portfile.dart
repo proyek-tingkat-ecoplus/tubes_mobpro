@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tubes_mobpro/pages/help.dart';
 import 'package:tubes_mobpro/pages/login.dart';
 import 'package:tubes_mobpro/pages/profile_details.dart';
+import 'package:tubes_mobpro/service/ApiService.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -44,19 +45,19 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _logout() async {
-      const String url = "https://ecopulse.top/api/auth/logout";
     try{
-    final response = await http.post(
-        Uri.parse(url),
+      ApiService apiService = ApiService(baseUrl: 'https://ecopulse.top');
+      final response = await apiService.request(
+        endpoint: '/api/auth/logout',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          "Accept": "application/json",
-          "Authorization" : "Bearer $_token",
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $_token',
         },
-        //body: jsonEncode(payload),
       );
 
-      if(response.statusCode == 200){
+      if(response['statusCode'] == 200){
         final prefs = await SharedPreferences.getInstance();
         prefs.remove('user');
         prefs.remove('access_token');
@@ -67,9 +68,9 @@ class _ProfilePageState extends State<ProfilePage> {
           MaterialPageRoute(builder: (_) => const Splashscreen(Pages: Login(),)),
         );
       }else{
-        final Map<String, dynamic> errorData = jsonDecode(response.body);
+        final Map<String, dynamic> errorData = jsonDecode(response['body']);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(errorData['message'] ?? 'Login failed' + response.body)),
+          SnackBar(content: Text(errorData['message'] ?? 'Login failed' + response['body'])),
         );
       }
     }catch(e){

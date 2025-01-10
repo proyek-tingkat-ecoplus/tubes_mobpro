@@ -26,20 +26,21 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 class _HomeState extends State<Home> {
   String _username = "Guest"; // Default username placeholder
-
+  String _image = "https://i.imgur.com/pu4BpSa.png";
   @override
   void initState() {
     super.initState();
-    _loadUsername(); // Load the username on initialization
+    _loadData(); // Load the username on initialization
   }
 
-  Future<void> _loadUsername() async {
+  Future<void> _loadData() async {
     final prefs = await SharedPreferences.getInstance();
     String? userJson = prefs.getString('user');
     if (userJson != null) {
       Map<String, dynamic> userMap = jsonDecode(userJson);
       setState(() {
         _username = userMap['username'];
+        _image = 'https://ecopulse.top/'+ userMap['photo'];
       });
     }
   }
@@ -131,10 +132,8 @@ class _HomeState extends State<Home> {
                 ),
               );
             },
-            child: const CircleAvatar(
-              backgroundImage: NetworkImage(
-                'https://i.imgur.com/pu4BpSa.png', // URL foto profil
-              ),
+            child: CircleAvatar(
+              backgroundImage: NetworkImage(_image),
             ),
           ),
           const SizedBox(width: 16),

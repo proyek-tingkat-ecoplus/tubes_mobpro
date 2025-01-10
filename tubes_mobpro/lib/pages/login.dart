@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:tubes_mobpro/service/ApiService.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Login extends StatefulWidget {
@@ -131,7 +132,7 @@ class _LoginState extends State<Login> {
       _isLoading = true;
     });
 
-    String email = _usernameController.text.trim();
+    String email = _usernameController.text.trim(); 
     String password = _passwordController.text;
 
     if (email.isEmpty || password.isEmpty) {
